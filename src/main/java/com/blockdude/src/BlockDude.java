@@ -28,6 +28,7 @@ public class BlockDude {
 			
 			Display.update();
 		}
+		Display.destroy();
 	}
 	
 	private void exit() {
