@@ -1,24 +1,28 @@
 package com.blockdude.src.screens;
 
-import org.lwjgl.opengl.Display;
-import org.newdawn.slick.Color;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.blockdude.src.fonts.Fonts;
-import com.blockdude.src.textures.TextureHelper;
-import com.blockdude.src.textures.Textures;
+import org.lwjgl.opengl.Display;
+
+import com.blockdude.src.gui.GuiButton;
+import com.blockdude.src.gui.GuiMainMenuTextButton;
 
 public class ScreenMainMenu extends Screen {
+	private List<GuiButton> buttons = new ArrayList<GuiButton>();
+	
 	@Override
 	public void update(float delta) {
-		
+		for(GuiButton button : this.buttons) {
+			button.update();
+		}
 	}
 
 	@Override
 	public void display(float delta) {
-		Fonts.OPEN_SANS.drawCenteredString(22, Display.getWidth() / 2, Display.getHeight() / 2, "START", Color.white);
-		Fonts.OPEN_SANS.drawCenteredString(22, Display.getWidth() / 2, Display.getHeight() / 2 + 26, "QUIT", Color.white);
-		
-		TextureHelper.drawTexture(Textures.TEST, 100, 100);
+		for(GuiButton button : this.buttons) {
+			button.render();
+		}
 	}
 
 	@Override
@@ -28,6 +32,8 @@ public class ScreenMainMenu extends Screen {
 
 	@Override
 	public void show() {
-		
+		this.buttons.clear();
+		this.buttons.add(new GuiMainMenuTextButton("START", Display.getWidth() / 2, Display.getHeight() / 2 - 12));
+		this.buttons.add(new GuiMainMenuTextButton("QUIT", Display.getWidth() / 2, Display.getHeight() / 2 + 12));
 	}
 }

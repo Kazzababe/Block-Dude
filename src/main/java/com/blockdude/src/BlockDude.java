@@ -1,10 +1,24 @@
 package com.blockdude.src;
 
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_STENCIL_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glOrtho;
+import static org.lwjgl.opengl.GL11.glViewport;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.PixelFormat;
 
 import com.blockdude.src.screens.Screen;
 import com.blockdude.src.screens.Screens;
@@ -26,7 +40,7 @@ public class BlockDude {
 	private void createDisplay() {
 		try {
 			Display.setDisplayMode(new DisplayMode(DIMENSIONS[0], DIMENSIONS[1]));
-			Display.create();
+			Display.create(new PixelFormat(8, 0, 0, 8));
 		} catch(LWJGLException e) {
 			e.printStackTrace();
 			this.exit();
@@ -35,19 +49,19 @@ public class BlockDude {
 	}
 	
 	private void initGL() {
-		GL11.glViewport(0, 0, DIMENSIONS[0], DIMENSIONS[1]);
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-	    GL11.glLoadIdentity();
-	    GL11.glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, 1, -1);
-	    GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		glViewport(0, 0, DIMENSIONS[0], DIMENSIONS[1]);
+		glMatrixMode(GL_PROJECTION);
+	    glLoadIdentity();
+	    glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, 1, -1);
+	    glMatrixMode(GL_MODELVIEW);
 	    
-	    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	private void display() {
 		while(!Display.isCloseRequested()) {
 			int delta = getDelta();
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			
 			if(screen != null) {
 				screen.update(delta);
@@ -76,10 +90,10 @@ public class BlockDude {
 		if(BlockDude.screen != null) BlockDude.screen.dispose();
 		try {
 			BlockDude.screen = screen.getScreenClass().newInstance();
+			BlockDude.screen.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 			return;
 		}
-		BlockDude.screen.show();
 	}
 }
