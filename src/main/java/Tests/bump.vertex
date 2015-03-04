@@ -1,0 +1,12 @@
+varying vec3 color;
+uniform highp float time;
+
+void main() {
+	color = gl_Color.rgb;
+	
+	// Use default transformation
+	vec4 pos = ftransform();
+	//pos.x += sin(pos.y + time*0.1) * 0.1;
+	
+	gl_Position = pos;
+}

@@ -1,18 +1,6 @@
 package com.blockdude.src;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_PROJECTION;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_STENCIL_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glLoadIdentity;
-import static org.lwjgl.opengl.GL11.glMatrixMode;
-import static org.lwjgl.opengl.GL11.glOrtho;
-import static org.lwjgl.opengl.GL11.glViewport;
+import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -39,30 +27,49 @@ public class BlockDude {
 	
 	private void createDisplay() {
 		try {
-			Display.setDisplayMode(new DisplayMode(DIMENSIONS[0], DIMENSIONS[1]));
-			Display.create(new PixelFormat(8, 0, 0, 8));
+			Display.setDisplayMode(new DisplayMode(GlobalOptions.WIDTH, GlobalOptions.HEIGHT));
+			System.out.println(GlobalOptions.useAA);
+			if(GlobalOptions.useAA)
+				try{
+					Display.create(new PixelFormat(32, 0, 24, 0, 4));
+				}catch(Exception e){
+					Display.create(); // in-case the computer doesn't support Anti-Alias
+				}
+			else
+				Display.create();
+			
+			GlobalOptions.useAA = !GlobalOptions.useAA;
+			System.out.println(GlobalOptions.useAA);
+			//Display.create();
 		} catch(LWJGLException e) {
 			e.printStackTrace();
 			this.exit();
 		}
-		setScreen(Screens.MAIN_MENU);
+		setScreen(Screens.GAME);
 	}
 	
 	private void initGL() {
 		glViewport(0, 0, DIMENSIONS[0], DIMENSIONS[1]);
 		glMatrixMode(GL_PROJECTION);
 	    glLoadIdentity();
-	    glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, 1, -1);
+	    glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, 1000, -1000);
 	    glMatrixMode(GL_MODELVIEW);
 	    
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	private void display() {
+		//glClearColor(0.4f, 0.6f, 0.9f, 0f);
 		while(!Display.isCloseRequested()) {
 			int delta = getDelta();
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-			
+			 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+		      glMatrixMode(GL_PROJECTION);
+		      glLoadIdentity();
+
+		      glMatrixMode(GL_MODELVIEW);
+		      glLoadIdentity();
+		      glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, 1000, -1000);
 			if(screen != null) {
 				screen.update(delta);
 				screen.display(delta);
