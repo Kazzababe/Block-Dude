@@ -10,6 +10,7 @@ import org.lwjgl.opengl.PixelFormat;
 
 import com.blockdude.src.screens.Screen;
 import com.blockdude.src.screens.Screens;
+import com.blockdude.src.util.input.InputHelper;
 
 public class BlockDude {
 	private static final int[] DIMENSIONS = {1280, 720};
@@ -27,25 +28,21 @@ public class BlockDude {
 	
 	private void createDisplay() {
 		try {
-			Display.setDisplayMode(new DisplayMode(GlobalOptions.WIDTH, GlobalOptions.HEIGHT));
-			System.out.println(GlobalOptions.useAA);
-			if(GlobalOptions.useAA)
-				try{
+			Display.setDisplayMode(new DisplayMode(DIMENSIONS[0], DIMENSIONS[1]));
+			if(GlobalOptions.useAA) {
+				try {
 					Display.create(new PixelFormat(32, 0, 24, 0, 4));
-				}catch(Exception e){
+				} catch(Exception e) {
 					Display.create(); // in-case the computer doesn't support Anti-Alias
 				}
-			else
+			} else {
 				Display.create();
-			
-			GlobalOptions.useAA = !GlobalOptions.useAA;
-			System.out.println(GlobalOptions.useAA);
-			//Display.create();
+			}
 		} catch(LWJGLException e) {
 			e.printStackTrace();
 			this.exit();
 		}
-		setScreen(Screens.GAME);
+		setScreen(Screens.MAIN_MENU);
 	}
 	
 	private void initGL() {
@@ -59,17 +56,12 @@ public class BlockDude {
 	}
 	
 	private void display() {
-		//glClearColor(0.4f, 0.6f, 0.9f, 0f);
 		while(!Display.isCloseRequested()) {
 			int delta = getDelta();
-			 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-		      glMatrixMode(GL_PROJECTION);
-		      glLoadIdentity();
-
-		      glMatrixMode(GL_MODELVIEW);
-		      glLoadIdentity();
-		      glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, 1000, -1000);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			
+			InputHelper.update();
+			
 			if(screen != null) {
 				screen.update(delta);
 				screen.display(delta);
