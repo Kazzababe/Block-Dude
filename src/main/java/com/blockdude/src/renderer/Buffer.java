@@ -11,23 +11,10 @@ import java.nio.FloatBuffer;
  * @author Jocopa3 (Matt Staubus)
  */
 public class Buffer {
-
-	public boolean drawing; //Whether or not the VBO will add vertices
-    public boolean coloring; //Whether or not the VBO will add color values
-    public boolean texturing; //Whether or not the VBO will add texture coords
-    //public boolean normalizing = false; //Not implemented yet;
-
-    public int vertexStart; //Start pos for vertices
-    public int colorStart; //Start pos for colors
-    public int textureStart; //Start pos for textures
-    
-    public int drawMode;
-
-    public int VERTEX_SIZE = 8; //Amount of components per vertex (X,Y,Z,R,G,B,U,V)
-    public int VERTEX_BYTE_SIZE = VERTEX_SIZE * 4;
 	
     public int[] buffers; //Buffer handler ID's
     public int[] bufferLengths; //Buffer lengths
+    public BufferProperties[] bufferProperties;
 
     public int length;
 
@@ -38,18 +25,21 @@ public class Buffer {
         length = DEFAULT_BUFFER_AMOUNT;
         buffers = new int[DEFAULT_BUFFER_AMOUNT];
         bufferLengths = new int[DEFAULT_BUFFER_AMOUNT];
+        bufferProperties = new BufferProperties[DEFAULT_BUFFER_AMOUNT];
     }
 
     public Buffer(int amount) {
         length = amount;
         buffers = new int[amount];
         bufferLengths = new int[amount];
+        bufferProperties = new BufferProperties[amount];
     }
 
-    public Buffer(int[] buffs, int[] lengths) {
+    public Buffer(int[] buffs, int[] lengths, BufferProperties[] properties) {
         length = buffers.length;
         buffers = buffs;
         bufferLengths = lengths;
+        bufferProperties = properties;
     }
 
     //Set the buffer array to a given array
@@ -71,17 +61,29 @@ public class Buffer {
     public void setBufferLength(int index, int length) {
         bufferLengths[index] = length;
     }
+    
+  //Set the buffer property array
+    public void setBufferLengths(BufferProperties[] properties) {
+        bufferProperties = properties;
+    }
+
+    //Set the length of a buffer at a given index
+    public void setBufferLength(int index, BufferProperties properties) {
+    	bufferProperties[index] = properties;
+    }
 
     //Set the buffer array and length array to a new array (Potential for memory leak: should it delete buffers first?)
-    public void setBuffersAndLengths(int[] buffer, int[] lengths) {
+    public void setBuffersAndLengths(int[] buffer, int[] lengths, BufferProperties[] properties) {
         buffers = buffer;
         bufferLengths = lengths;
+        bufferProperties = properties;
     }
 
     //Set the buffer and length at a specified index
-    public void setBufferAndLength(int index, int buffer, int lengths) {
+    public void setBufferAndLength(int index, int buffer, int lengths, BufferProperties properties) {
         buffers[index] = buffer;
         bufferLengths[index] = lengths;
+        bufferProperties[index] = properties;
     }
 
     //Get the array of buffers
@@ -103,6 +105,16 @@ public class Buffer {
     public int getBufferLength(int index) {
         return bufferLengths[index];
     }
+    
+  //Get the array of buffer lengths
+    public BufferProperties[] getBufferProperties() {
+        return bufferProperties;
+    }
+
+    //Get the length of a given buffer
+    public BufferProperties getBufferProperties(int index) {
+    	return bufferProperties[index];
+    }
 
     //Returns whether deletion was successful or not
     public boolean deleteBuffer(int index) {
@@ -111,6 +123,7 @@ public class Buffer {
 
             buffers[index] = 0;
             bufferLengths[index] = 0;
+            bufferProperties[index] = null;
 
             return true;
         } catch (Exception e) {
@@ -128,6 +141,7 @@ public class Buffer {
 
             buffers = null;
             bufferLengths = null;
+            bufferProperties = null;
 
             return true;
         } catch (Exception e) {
@@ -137,50 +151,47 @@ public class Buffer {
     }
     
     public void draw(){
-    	
-        
-        System.out.println(drawing+" : " + (vertexStart*4)+"\n"+coloring+" : " + (colorStart*4)+"\n"+texturing+" : " + (textureStart*4)+"\n"+getBufferLength(0)+" : "+getBuffer(0)+"\n"+VERTEX_BYTE_SIZE+"\n");
-
+    	BufferProperties props;
         for (int i = 0; i < length; i++) {
-            if (getBuffer(i) <= 0 || getBufferLength(i) <= 0){
+        	props = getBufferProperties(i);
+            if (getBuffer(i) <= 0 || getBufferLength(i) <= 0 || props == null){
                 continue; //Ignore any empty buffers
             }
-            
+            //System.out.println(props.drawing+" : " + (props.vertexStart*4)+"\n"+props.coloring+" : " + (props.colorStart*4)+"\n"+props.texturing+" : " + (props.textureStart*4)+"\n"+getBufferLength(0)+" : "+getBuffer(0)+"\n"+props.VERTEX_BYTE_SIZE+"\n");
             glBindBuffer(GL_ARRAY_BUFFER, getBuffer(i));
             
-            if (drawing) {
-            	glVertexPointer(3, GL_FLOAT, VERTEX_BYTE_SIZE, vertexStart * 4);
+            if (props.drawing) {
+            	glVertexPointer(3, GL_FLOAT, props.VERTEX_BYTE_SIZE, props.vertexStart * 4);
             }
-            if (coloring) {
-                glColorPointer(3, GL_FLOAT, VERTEX_BYTE_SIZE, colorStart * 4);
+            if (props.coloring) {
+                glColorPointer(3, GL_FLOAT, props.VERTEX_BYTE_SIZE, props.colorStart * 4);
             }
-            if (texturing) {
-                glTexCoordPointer(2, GL_FLOAT, VERTEX_BYTE_SIZE, textureStart * 4);
+            if (props.texturing) {
+                glTexCoordPointer(2, GL_FLOAT, props.VERTEX_BYTE_SIZE, props.textureStart * 4);
             }
             
-            if (drawing) {
+            if (props.drawing) {
                 glEnableClientState(GL_VERTEX_ARRAY); 
             }
-            if (coloring) {
+            if (props.coloring) {
                 glEnableClientState(GL_COLOR_ARRAY);
             }
-            if (texturing) {
+            if (props.texturing) {
                 glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             }
-            glDrawArrays(drawMode, 0, getBufferLength(i));
-            if (texturing) {
+            glDrawArrays(props.drawMode, 0, getBufferLength(i));
+            if (props.texturing) {
                 glDisableClientState(GL_TEXTURE_COORD_ARRAY);
             }
-            if (coloring) {
+            if (props.coloring) {
                 glDisableClientState(GL_COLOR_ARRAY);
             }
-            if (drawing) {
+            if (props.drawing) {
                 glDisableClientState(GL_VERTEX_ARRAY);
             }
+            System.out.println(i);
         }
-        
+        System.out.println();
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        
-       
     }
 }

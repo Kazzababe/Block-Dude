@@ -169,7 +169,8 @@ public class Tesselator {
         
         buffer.flip();
 
-        buffers.setBufferAndLength(current, glGenBuffers(), vertexCount);
+        BufferProperties props = new BufferProperties(drawing, coloring, texturing, vertexStart, colorStart, textureStart, drawMode, VERTEX_SIZE, VERTEX_BYTE_SIZE);
+        buffers.setBufferAndLength(current, glGenBuffers(), vertexCount, props);
 
         glBindBuffer(GL_ARRAY_BUFFER, buffers.getBuffer(current));
         glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
@@ -229,15 +230,6 @@ public class Tesselator {
 
     //Returns all buffer handlers
     public Buffer getBuffer() {
-    	buffers.drawing = drawing;
-    	buffers.coloring = coloring;
-    	buffers.texturing = texturing;
-    	buffers.vertexStart = vertexStart;
-    	buffers.colorStart = colorStart;
-    	buffers.textureStart = textureStart;
-    	buffers.VERTEX_SIZE = VERTEX_SIZE;
-    	buffers.VERTEX_BYTE_SIZE = VERTEX_BYTE_SIZE;
-    	buffers.drawMode = drawMode;
         return buffers;
     }
 

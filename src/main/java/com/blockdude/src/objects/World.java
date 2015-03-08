@@ -1,9 +1,13 @@
 package com.blockdude.src.objects;
 
+import org.lwjgl.input.Keyboard;
+
+import com.blockdude.src.InputHelper;
 import com.blockdude.src.objects.entities.Entity;
 import com.blockdude.src.objects.tiles.*;
 import com.blockdude.src.renderer.Renderable;
-import static org.lwjgl.opengl.GL11.glTranslatef;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class World extends Renderable{
 	private Level[] levels;
@@ -26,15 +30,24 @@ public class World extends Renderable{
 
 	@Override
 	public void render() {
+		//glPushMatrix();
+		
+		//glTranslatef(0, 0, 0f);
 		levels[currentLevel].render();
+		
+		player.render();
+		
+		//glPopMatrix();
 	}
 
 	@Override
 	public void update() {
-		player.pos.x = (float) (Math.cos(time*3)*500);
-		player.pos.y = (float) (Math.sin(time)*500);
+		player.update();
+		
+		//player.pos.x = (float) (Math.cos(time*3)*500);
+		//player.pos.y = (float) (Math.sin(time)*500);
 		time += 0.01;
-		glTranslatef(player.pos.x, player.pos.y, 0f);
+		
 		levels[currentLevel].update();
 	}
 

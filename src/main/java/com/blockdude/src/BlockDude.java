@@ -37,9 +37,7 @@ public class BlockDude {
 				}
 			else
 				Display.create();
-			
-			GlobalOptions.useAA = !GlobalOptions.useAA;
-			System.out.println(GlobalOptions.useAA);
+
 			//Display.create();
 		} catch(LWJGLException e) {
 			e.printStackTrace();
@@ -52,7 +50,7 @@ public class BlockDude {
 		glViewport(0, 0, DIMENSIONS[0], DIMENSIONS[1]);
 		glMatrixMode(GL_PROJECTION);
 	    glLoadIdentity();
-	    glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, 1000, -1000);
+	    glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, -1, 1);
 	    glMatrixMode(GL_MODELVIEW);
 	    
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -62,14 +60,10 @@ public class BlockDude {
 		//glClearColor(0.4f, 0.6f, 0.9f, 0f);
 		while(!Display.isCloseRequested()) {
 			int delta = getDelta();
-			 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			InputHelper.update();
+			
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		      glMatrixMode(GL_PROJECTION);
-		      glLoadIdentity();
-
-		      glMatrixMode(GL_MODELVIEW);
-		      glLoadIdentity();
-		      glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, 1000, -1000);
 			if(screen != null) {
 				screen.update(delta);
 				screen.display(delta);

@@ -18,19 +18,9 @@ public class ScreenGame extends Screen {
 		
 		Entity player = new Player(0);
 		worlds[0] = new World(player, 1);
-		Tile[][] tiles = new Tile[10][10];
+		Tile[][] tiles = Level.createRandomWorld(25, 14);
 		
 		System.out.println("Created World, Player and Level");
-		
-		for(int x = 0; x < 10; x++){
-			tiles[x][0] = Tile.staticTile;
-			tiles[x][9] = Tile.staticTile;
-		}
-		
-		for(int y = 0; y < 10; y++){
-			tiles[0][y] = Tile.staticTile;
-			tiles[9][y] = Tile.staticTile;
-		}
 		
 		Level l = new Level(worlds[0], tiles);
 		worlds[0].setLevel(0, l);
