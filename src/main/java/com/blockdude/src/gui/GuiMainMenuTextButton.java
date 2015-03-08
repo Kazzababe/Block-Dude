@@ -1,23 +1,24 @@
 package com.blockdude.src.gui;
 
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
 import com.blockdude.src.fonts.Fonts;
+import com.blockdude.src.screens.Screen;
 import com.blockdude.src.shapes.ShapesHelper;
 
 public class GuiMainMenuTextButton extends GuiButton {
-	private boolean active = false;
+	private Screen parent;
 
-	public GuiMainMenuTextButton(String text, float x, float y) {
-		super(text, x, y);
+	public GuiMainMenuTextButton(Screen parent, int id, String text, float x, float y) {
+		super(id, text, x, y);
+		
+		this.parent = parent;
 	}
 
 	@Override
 	public void render() {
 		Fonts.CENTURY_GOTHIC.drawCenteredString(22, this.getX(), this.getY(), this.getText(), Color.white);
-		if(this.active) {
+		if(this.isActive()) {
 			float width = Fonts.CENTURY_GOTHIC.getFont(22).getWidth(this.getText());
 			float halfWidth = width / 2;
 			ShapesHelper.triangle(this.getX() - halfWidth - 10, this.getY(), this.getX() - halfWidth - 20, this.getY() - 6, this.getX() - halfWidth - 20, this.getY() + 6, Color.white);
@@ -27,7 +28,7 @@ public class GuiMainMenuTextButton extends GuiButton {
 
 	@Override
 	public void onMouseClick() {
-		
+		this.parent.onButtonClick(this);
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class GuiMainMenuTextButton extends GuiButton {
 	
 	@Override
 	public void update() {
-		this.active = isInside(Mouse.getX(), Display.getHeight() - Mouse.getY());
+		super.update();
 	}
 
 	@Override
@@ -51,15 +52,5 @@ public class GuiMainMenuTextButton extends GuiButton {
 		float y2 = this.getY() + 11;
 		
 		return x >= x1 && x <= x2 && y >= y1 && y <= y2;
-	}
-
-	@Override
-	public void onMouseEnter() {
-		
-	}
-
-	@Override
-	public void onMouseExit() {
-		
 	}
 }

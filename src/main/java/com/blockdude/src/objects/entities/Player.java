@@ -7,7 +7,7 @@ import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.ShapeRenderer;
 
-import com.blockdude.src.InputHelper;
+import com.blockdude.src.util.input.InputHelper;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -22,8 +22,8 @@ public class Player extends Entity {
 		this.speed.y = 0.5f;
 		this.pos.x = 300;
 		this.pos.y = 300;
-		this.shape = new Rectangle(0,0,40,40);
-		fill = new GradientFill(0,0,new Color((float)Math.random(), (float)Math.random(), (float)Math.random()),1000,1000, new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
+		this.shape = new Rectangle(0,0,16,30);
+		fill = new GradientFill(0,0,new Color((float)Math.random(), (float)Math.random(), (float)Math.random()),16,32, new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class Player extends Entity {
 		}
 		
 		motion.x = motion.x > 10 ? 10 : motion.x < -10 ? -10 : motion.x;
-		motion.y = motion.y > 10 ? 10 : motion.y < -10 ? -10 : motion.y;
+		motion.y = motion.y > 10 ? 10 : motion.y < -32 ? -32 : motion.y;
 		
 		motion.x *= 0.95;
 		motion.y *= 0.95;

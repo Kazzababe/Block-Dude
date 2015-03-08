@@ -30,7 +30,7 @@ public class Level extends Renderable {
 	private Tile[][] tiles;
 	public final int width;
 	public final int height;
-	public int tileSize = 50;
+	public static final int tileSize = 32;
 	
 	private World world;
 	private Entity player;
@@ -47,33 +47,6 @@ public class Level extends Renderable {
 		player = world.getPlayer();
 		
 		createStaticBuffer();
-	}
-	
-	public static Tile[][] createRandomWorld(int width, int height){
-		Tile[][] tiles = new Tile[width][height];
-		
-		for(int x = 0; x < width; x++){
-			tiles[x][0] = Tile.staticTile;
-			tiles[x][height-1] = Tile.staticTile;
-		}
-		
-		for(int y = 0; y < height; y++){
-			tiles[0][y] = Tile.staticTile;
-			tiles[width-1][y] = Tile.staticTile;
-		}
-		
-		for(int i = 0; i < Math.random()*width*height*0.25; i++){
-			int x = (int)(Math.random()*width);
-			int y = (int)(Math.random()*height);
-			
-			if(tiles[x][y] != null){
-				i--;
-				continue;
-			}
-			tiles[x][y] = Tile.staticTile;
-		}
-		
-		return tiles;
 	}
 	
 	public void createStaticBuffer() {

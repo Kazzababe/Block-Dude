@@ -1,10 +1,9 @@
 package com.blockdude.src.objects.entities;
 
-import com.blockdude.src.InputHelper;
+import com.blockdude.src.util.input.InputHelper;
 import com.blockdude.src.renderer.Renderable;
 import com.blockdude.src.objects.Texture;
 
-import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.geom.*;
 
 public class Entity extends Renderable {

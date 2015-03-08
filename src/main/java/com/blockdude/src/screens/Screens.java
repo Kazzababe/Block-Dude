@@ -1,8 +1,8 @@
 package com.blockdude.src.screens;
 
 public enum Screens {
-	GAME(ScreenGame.class),
-	MAIN(ScreenMainMenu.class);
+	MAIN_MENU(ScreenMainMenu.class), 
+	GAME(ScreenGame.class);
 	
 	
 	private Class<? extends Screen> screenClass;

@@ -1,8 +1,5 @@
 package com.blockdude.src.objects;
 
-import org.lwjgl.input.Keyboard;
-
-import com.blockdude.src.InputHelper;
 import com.blockdude.src.objects.entities.Entity;
 import com.blockdude.src.objects.tiles.*;
 import com.blockdude.src.renderer.Renderable;
