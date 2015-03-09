@@ -1,12 +1,12 @@
 package com.blockdude.src.objects;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import com.blockdude.src.objects.entities.Entity;
-import com.blockdude.src.objects.tiles.*;
 import com.blockdude.src.renderer.Renderable;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class World extends Renderable{
+	public static final Vector2f GRAVITY = new Vector2f(0.0F, 0.25F / 16.0F);
 	private Level[] levels;
 	private int currentLevel;
 	private Entity player;
@@ -32,14 +32,14 @@ public class World extends Renderable{
 		//glTranslatef(0, 0, 0f);
 		levels[currentLevel].render();
 		
-		player.render();
+		player.render(4);
 		
 		//glPopMatrix();
 	}
 
 	@Override
 	public void update() {
-		player.update();
+		player.update(4);
 		
 		//player.pos.x = (float) (Math.cos(time*3)*500);
 		//player.pos.y = (float) (Math.sin(time)*500);

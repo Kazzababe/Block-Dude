@@ -1,15 +1,10 @@
 package com.blockdude.src.objects.entities;
 
+import com.blockdude.src.levels.Level;
+
 public class TileEntity extends Entity{
 
-	public TileEntity(int id) {
-		super(id);
-		// TODO Auto-generated constructor stub
+	public TileEntity(Level parentLevel, int id) {
+		super(parentLevel, id);
 	}
-	
-	public TileEntity(int id, int data) {
-		super(id, data);
-		// TODO Auto-generated constructor stub
-	}
-
 }

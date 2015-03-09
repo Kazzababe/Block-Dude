@@ -58,6 +58,10 @@ public class BlockDude {
 	private void display() {
 		while(!Display.isCloseRequested()) {
 			int delta = getDelta();
+			if(delta >= 64) {
+				delta = 64;
+			}
+			delta /= 16;
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			
 			InputHelper.update();

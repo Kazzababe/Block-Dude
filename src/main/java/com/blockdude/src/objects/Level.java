@@ -129,6 +129,10 @@ public class Level extends Renderable {
 	}
 
 	public void checkPlayerCollisions(){
+		
+	}
+	
+	private void solvePlayerCollisions(float xv, float yv) {
 		Shape tileShape;
 		for(int x = (int)(player.pos.x/tileSize) - 2; x < player.pos.x/tileSize + 2; x++){
 			for(int y = (int)(player.pos.y/tileSize) - 2; y < player.pos.y/tileSize + 2; y++){
@@ -137,13 +141,23 @@ public class Level extends Renderable {
 				
 				tileShape = tiles[x][y].getShape(x*tileSize+0.1f, y*tileSize+0.1f, tileSize-0.2f);
 				
-				if(tileShape.contains(player.shape)){
-					// Player fully inside block, do something to get them out...
-					player.pos.y += 50;
-				}else if(player.shape.intersects(tileShape)){
-					// Player not fully inside block
-					player.pos.set(player.lastPos);
-					player.motion.set(0,0);
+				if(tileShape.intersects(player.shape)) {
+					if(xv < 0) {
+						player.pos.x = x * Level.tileSize + Level.tileSize;
+						player.motion.x = 0;
+					}
+					if(xv > 0) {
+						player.pos.x = x * Level.tileSize - Level.tileSize;
+						player.motion.x = 0;
+					}
+					if(yv < 0) {
+						player.pos.y = y * Level.tileSize + Level.tileSize;
+						player.motion.y = 0;
+					}
+					if(yv > 0) {
+						player.pos.y = y * Level.tileSize - Level.tileSize;
+						player.motion.y = 0;
+					}
 				}
 			}
 		}
