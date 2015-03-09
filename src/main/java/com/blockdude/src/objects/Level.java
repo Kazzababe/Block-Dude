@@ -37,7 +37,7 @@ public class Level extends Renderable {
 	
 	private Buffer staticTiles;
 	
-	private int vertbuff, colbuff, v;
+	private int buff, colbuff, v;
 	
 	public Level(World world, Tile[][] tiles){
 		this.width = tiles.length;
@@ -64,8 +64,7 @@ public class Level extends Renderable {
 	}
 	
 	public void createStaticBuffer() {
-		FloatBuffer verticies = BufferUtils.createFloatBuffer(width*height*6*3);
-		FloatBuffer colors = BufferUtils.createFloatBuffer(width*height*6*3);
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(width*height*6*3*2);
 		
 		Tile t;
 		int x, y;
@@ -78,36 +77,31 @@ public class Level extends Renderable {
 				if(t==null)
 					continue;
 				
-				verticies.put(Tile.Vertices[0]*s+x*s); verticies.put(Tile.Vertices[1]*s+y*s); verticies.put(Tile.Vertices[2]*s);
-				colors.put((float)Math.random()); colors.put((float)Math.random()); colors.put((float)Math.random());
-				verticies.put(Tile.Vertices[3]*s+x*s); verticies.put(Tile.Vertices[4]*s+y*s); verticies.put(Tile.Vertices[5]*s);
-				colors.put((float)Math.random()); colors.put((float)Math.random()); colors.put((float)Math.random());
-				verticies.put(Tile.Vertices[6]*s+x*s); verticies.put(Tile.Vertices[7]*s+y*s); verticies.put(Tile.Vertices[8]*s);
-				colors.put((float)Math.random()); colors.put((float)Math.random()); colors.put((float)Math.random());
+				buffer.put(Tile.Vertices[0]*s+x*s); buffer.put(Tile.Vertices[1]*s+y*s); buffer.put(Tile.Vertices[2]*s);
+				buffer.put((float)Math.random()); buffer.put((float)Math.random()); buffer.put((float)Math.random());
+				buffer.put(Tile.Vertices[3]*s+x*s); buffer.put(Tile.Vertices[4]*s+y*s); buffer.put(Tile.Vertices[5]*s);
+				buffer.put((float)Math.random()); buffer.put((float)Math.random()); buffer.put((float)Math.random());
+				buffer.put(Tile.Vertices[6]*s+x*s); buffer.put(Tile.Vertices[7]*s+y*s); buffer.put(Tile.Vertices[8]*s);
+				buffer.put((float)Math.random()); buffer.put((float)Math.random()); buffer.put((float)Math.random());
 			
-				verticies.put(Tile.Vertices[9]*s+x*s); verticies.put(Tile.Vertices[10]*s+y*s); verticies.put(Tile.Vertices[11]*s);
-				colors.put((float)Math.random()); colors.put((float)Math.random()); colors.put((float)Math.random());
-				verticies.put(Tile.Vertices[12]*s+x*s); verticies.put(Tile.Vertices[13]*s+y*s); verticies.put(Tile.Vertices[14]*s);
-				colors.put((float)Math.random()); colors.put((float)Math.random()); colors.put((float)Math.random());
-				verticies.put(Tile.Vertices[15]*s+x*s); verticies.put(Tile.Vertices[16]*s+y*s); verticies.put(Tile.Vertices[17]*s);
-				colors.put((float)Math.random()); colors.put((float)Math.random()); colors.put((float)Math.random());
+				buffer.put(Tile.Vertices[9]*s+x*s); buffer.put(Tile.Vertices[10]*s+y*s); buffer.put(Tile.Vertices[11]*s);
+				buffer.put((float)Math.random()); buffer.put((float)Math.random()); buffer.put((float)Math.random());
+				buffer.put(Tile.Vertices[12]*s+x*s); buffer.put(Tile.Vertices[13]*s+y*s); buffer.put(Tile.Vertices[14]*s);
+				buffer.put((float)Math.random()); buffer.put((float)Math.random()); buffer.put((float)Math.random());
+				buffer.put(Tile.Vertices[15]*s+x*s); buffer.put(Tile.Vertices[16]*s+y*s); buffer.put(Tile.Vertices[17]*s);
+				buffer.put((float)Math.random()); buffer.put((float)Math.random()); buffer.put((float)Math.random());
 				
 				v+=6;
 			}
 		}
 		
-		verticies.flip();
-		colors.flip();
-		vertbuff = glGenBuffers();
-		colbuff = glGenBuffers();
+		buffer.flip();
+		buff = glGenBuffers();
 		
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertbuff);
-	    glBufferDataARB(GL_ARRAY_BUFFER_ARB, verticies, GL_STATIC_DRAW_ARB);
-	    glVertexPointer(3, GL_FLOAT, /* stride */3 << 2, 0L);
-
-	    glBindBufferARB(GL_ARRAY_BUFFER_ARB, colbuff);
-	    glBufferDataARB(GL_ARRAY_BUFFER_ARB, colors, GL_STATIC_DRAW_ARB);
-	    glColorPointer(3, GL_FLOAT, /* stride */3 << 2, 0L);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buff);
+	    glBufferDataARB(GL_ARRAY_BUFFER_ARB, buffer, GL_STATIC_DRAW_ARB);
+	    glVertexPointer(3, GL_FLOAT, /* stride */6 << 2, 0);
+	    glColorPointer(3, GL_FLOAT, /* stride */6 << 2, 3 << 2);
 	    
 	    glBindBuffer(GL_ARRAY_BUFFER_ARB, 0);
 	}
@@ -121,11 +115,10 @@ public class Level extends Renderable {
 		glEnableClientState(GL_VERTEX_ARRAY);
 	    glEnableClientState(GL_COLOR_ARRAY);
 		
-	    glBindBuffer(GL_ARRAY_BUFFER_ARB, colbuff);
-	    glColorPointer(3, GL_FLOAT, /* stride */3 << 2, 0L);
+	    glBindBuffer(GL_ARRAY_BUFFER_ARB, buff);
+	    glVertexPointer(3, GL_FLOAT, /* stride */6 << 2, 0);
+	    glColorPointer(3, GL_FLOAT, /* stride */6 << 2, 3 << 2);
 	    
-	    glBindBuffer(GL_ARRAY_BUFFER_ARB, vertbuff);
-	    glVertexPointer(3, GL_FLOAT, /* stride */3 << 2, 0L);
 	    glDrawArrays(GL_TRIANGLES, 0, v);
 	    
 	    glBindBuffer(GL_ARRAY_BUFFER_ARB, 0);
