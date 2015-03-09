@@ -7,6 +7,7 @@ import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.ShapeRenderer;
 
+import com.blockdude.src.GlobalOptions;
 import com.blockdude.src.util.input.InputHelper;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -14,7 +15,11 @@ import static org.lwjgl.opengl.GL11.*;
 public class Player extends Entity {
 
 	public ShapeFill fill;
+	
+	public boolean isOnGround = false; // Not used, at least not yet
 	public boolean isJumping = false;
+	public float jumpSpeed = -10.0f;
+	public float maxSpeed = 10.0f;
 	
 	public Player(int id) {
 		super(id);
@@ -36,6 +41,7 @@ public class Player extends Entity {
 	public void update(){
 		lastPos.set(pos);
 		
+		// Handle player input
 		if(InputHelper.isKeyDown(Keyboard.KEY_UP) || InputHelper.isKeyDown(Keyboard.KEY_W)){
 			motion.y -= speed.y;
 		}
@@ -49,20 +55,23 @@ public class Player extends Entity {
 			motion.x += speed.x;
 		}
 		if(!isJumping && InputHelper.isKeyDown(Keyboard.KEY_SPACE)){
-			motion.y = -10;
+			motion.y = jumpSpeed;
 			isJumping = true;
 		}
 		if(InputHelper.isKeyReleased(Keyboard.KEY_SPACE) && motion.y == 0){
 			isJumping = false;
 		}
 		
-		motion.x = motion.x > 10 ? 10 : motion.x < -10 ? -10 : motion.x;
-		motion.y = motion.y > 10 ? 10 : motion.y < -32 ? -32 : motion.y;
+		// Limit momentum so that you can't run/fly super-fast
+		motion.x = motion.x > maxSpeed ? maxSpeed : motion.x < -maxSpeed ? -maxSpeed : motion.x;
+		motion.y = motion.y > maxSpeed ? maxSpeed : motion.y < -GlobalOptions.TERMINAL_VELOCITY ? -GlobalOptions.TERMINAL_VELOCITY : motion.y;
 		
-		motion.x *= 0.95;
-		motion.y *= 0.95;
-		motion.y += 0.25;
+		// Update player momentum with friction
+		motion.x *= friction.x;
+		motion.y *= friction.y;
+		motion.y += GlobalOptions.GRAVITY; // Gravity
 		
+		// Update player position
 		pos.x += motion.x;
 		pos.y += motion.y;
 		

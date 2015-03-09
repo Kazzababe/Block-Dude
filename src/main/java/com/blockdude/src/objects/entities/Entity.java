@@ -10,29 +10,22 @@ public class Entity extends Renderable {
 	private int id;
 	private int data;
 	
-	public Vector2f speed;
-	public Vector2f motion;
-	public Vector2f pos;
-	public Vector2f lastPos;
+	public Vector2f speed = new Vector2f(10,10);
+	public Vector2f motion = new Vector2f(0,0);
+	public Vector2f pos = new Vector2f(0,0);
+	public Vector2f lastPos = new Vector2f(0,0);
+	public Vector2f friction = new Vector2f(0.95f,0.95f);
 	
 	public Shape shape;
 	public Texture texture;
 	
 	public Entity(int id){
 		this.id = id;
-		this.pos = new Vector2f();
-		this.speed = new Vector2f();
-		this.motion = new Vector2f();
-		this.lastPos = new Vector2f();
 	}
 	
 	public Entity(int id, int data){
 		this.id = id;
 		this.data = data;
-		this.pos = new Vector2f();
-		this.lastPos = new Vector2f();
-		this.speed = new Vector2f();
-		this.motion = new Vector2f();
 	}
 
 	public void render() {

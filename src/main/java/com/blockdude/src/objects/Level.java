@@ -46,7 +46,21 @@ public class Level extends Renderable {
 		this.world = world;
 		player = world.getPlayer();
 		
+		placePlayerInOpenSpot();
+		
 		createStaticBuffer();
+	}
+	
+	public void placePlayerInOpenSpot(){
+		// Put the player in the first open square
+		loop: for(int y = 0; y < tiles[0].length; y++){
+			for(int x = 0; x < tiles.length; x++){
+				if(tiles[x][y] == null){
+					player.pos.set(x*tileSize, y*tileSize);
+					break loop;
+				}
+			}
+		}
 	}
 	
 	public void createStaticBuffer() {
@@ -121,8 +135,7 @@ public class Level extends Renderable {
 		//staticTiles.draw();
 	}
 
-	@Override
-	public void update() {
+	public void checkPlayerCollisions(){
 		Shape tileShape;
 		for(int x = (int)(player.pos.x/tileSize) - 2; x < player.pos.x/tileSize + 2; x++){
 			for(int y = (int)(player.pos.y/tileSize) - 2; y < player.pos.y/tileSize + 2; y++){
@@ -141,6 +154,16 @@ public class Level extends Renderable {
 				}
 			}
 		}
+	}
+	
+	public void checkEntityCollisions(){
+		// do something
+	}
+	
+	@Override
+	public void update() {
+		checkPlayerCollisions();
+		checkEntityCollisions();
 	}
 	
 }
