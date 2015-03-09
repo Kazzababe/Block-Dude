@@ -21,16 +21,6 @@ public class ScreenGame extends Screen {
 		Entity player = new Player(0);
 		Tile[][] tiles = LevelGenerator.createRandomWorld((int)(GlobalOptions.WIDTH/Level.tileSize), (int)(GlobalOptions.HEIGHT/Level.tileSize));
 		
-		// Put the player in the first open square
-		loop: for(int y = 0; y < tiles[0].length; y++){
-			for(int x = 0; x < tiles.length; x++){
-				if(tiles[x][y] == null){
-					player.pos.set(x*Level.tileSize, y*Level.tileSize);
-					break loop;
-				}
-			}
-		}
-		
 		worlds[0] = new World(player, 1);
 		Level l = new Level(worlds[0], tiles);
 		worlds[0].setLevel(0, l);

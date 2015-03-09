@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Player extends Entity {
 
 	public ShapeFill fill;
+	public boolean isJumping = false;
 	
 	public Player(int id) {
 		super(id);
@@ -46,6 +47,13 @@ public class Player extends Entity {
 		}
 		if(InputHelper.isKeyDown(Keyboard.KEY_RIGHT) || InputHelper.isKeyDown(Keyboard.KEY_D)){
 			motion.x += speed.x;
+		}
+		if(!isJumping && InputHelper.isKeyDown(Keyboard.KEY_SPACE)){
+			motion.y = -10;
+			isJumping = true;
+		}
+		if(InputHelper.isKeyReleased(Keyboard.KEY_SPACE) && motion.y == 0){
+			isJumping = false;
 		}
 		
 		motion.x = motion.x > 10 ? 10 : motion.x < -10 ? -10 : motion.x;

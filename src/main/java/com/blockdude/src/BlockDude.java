@@ -49,7 +49,7 @@ public class BlockDude {
 		glViewport(0, 0, DIMENSIONS[0], DIMENSIONS[1]);
 		glMatrixMode(GL_PROJECTION);
 	    glLoadIdentity();
-	    glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, 1000, -1000);
+	    glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, -1, 1);
 	    glMatrixMode(GL_MODELVIEW);
 	    
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
