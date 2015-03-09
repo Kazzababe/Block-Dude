@@ -47,7 +47,6 @@ public class Player extends Entity {
 		// Update this position
 		this.motion.x += World.GRAVITY.x * delta;
 		this.motion.y += World.GRAVITY.y * delta;
-		System.out.println(delta + ":" + this.motion.y);
 		
 		this.pos.x += this.motion.x;
 		this.shape.setLocation(this.pos);

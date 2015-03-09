@@ -15,6 +15,7 @@ import com.blockdude.src.util.input.InputHelper;
 public class BlockDude {
 	private static final int[] DIMENSIONS = {GlobalOptions.WIDTH, GlobalOptions.HEIGHT};
 	private static final int TARGET_FPS = 60;
+	private static final float TARGET_DELTA = (float) Math.floor(1000.0 / TARGET_FPS);
 	
 	private static Screen screen;
 	
@@ -58,10 +59,11 @@ public class BlockDude {
 	private void display() {
 		while(!Display.isCloseRequested()) {
 			int delta = getDelta();
-			if(delta >= 64) {
-				delta = 64;
+			if(delta >= TARGET_DELTA * 2) {
+				delta = (int) TARGET_DELTA * 2;
 			}
-			delta /= 16;
+			delta /= TARGET_DELTA;
+			if(delta == 0) delta = 1;
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			
 			InputHelper.update();
