@@ -1,9 +1,8 @@
 package com.blockdude.src.objects.tiles;
 
-import com.blockdude.src.objects.Texture;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.*;
+import org.newdawn.slick.opengl.Texture;
 
 public class Tile {
 	
@@ -14,25 +13,44 @@ public class Tile {
 	public boolean isAnimated = false;
 	
 	public final int id;
+	public final int data;
 	
 	public Color color;
 	
 	private Shape shape;
-	public Texture texture;
 	
-	public static final float[] Vertices = {
+	public float[] Vertices = {
 	        // Left bottom triangle
-	        0f, 1f, 0f,
 	        0f, 0f, 0f,
-	        1f, 0f, 0f,
-	        // Right top triangle
-	        1f, 0f, 0f,
+	        0f, 1f, 0f,
 	        1f, 1f, 0f,
-	        0f, 1f, 0f
+	        // Right top triangle
+	        1f, 1f, 0f,
+	        1f, 0f, 0f,
+	        0f, 0f, 0f
+	};
+	
+	public float[] UVs = {
+        // Left bottom triangle
+        0f, 0f,
+        0f, 1f,
+        1f, 1f,
+        // Right top triangle
+        1f, 1f,
+        1f, 0f,
+        0f, 0f
 	};
 	
 	public Tile(int id){
 		this.id = id;
+		this.data = 0;
+		
+		tiles[id] = this;
+	}
+	
+	public Tile(int id, int data){
+		this.id = id;
+		this.data = data;
 		
 		tiles[id] = this;
 	}

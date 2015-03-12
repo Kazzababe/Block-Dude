@@ -44,6 +44,10 @@ public class Entity {
 		
 	}
 	
+	public Vector2f getPosition(){
+		return this.pos.copy();
+	}
+	
 	public Level getParentLevel() {
 		return this.parentLevel;
 	}

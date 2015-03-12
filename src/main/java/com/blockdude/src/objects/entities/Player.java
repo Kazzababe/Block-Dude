@@ -19,7 +19,7 @@ public class Player extends Entity {
 	private static final float JUMP_HEIGHT = 6F;
 	private static final float MAX_SPEED = 5F;
 
-	public ShapeFill fill;
+	//public ShapeFill fill;
 	
 	public boolean isOnGround = false; // Not used, at least not yet
 	public boolean isJumping = false;
@@ -31,13 +31,13 @@ public class Player extends Entity {
 		
 		this.speed = new Vector2f(0.5F, 0.5F);
 		this.pos = new Vector2f(300F, 300F);
-		this.shape = new Rectangle(0,0,16,30);
-		this.fill = new GradientFill(0,0,new Color((float)Math.random(), (float)Math.random(), (float)Math.random()),16,32, new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
+		this.shape = new Rectangle(0,0,16,28);
+		//this.fill = new GradientFill(0,0,new Color((float)Math.random(), (float)Math.random(), (float)Math.random()),16,32, new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
 	}
 
 	@Override
 	public void render(float delta){
-	    ShapeRenderer.draw(shape, fill);
+	    ShapeRenderer.draw(shape);
 	}
 	
 	@Override
@@ -110,7 +110,7 @@ public class Player extends Entity {
 						this.isOnGround = true;
 						this.motion.y = 0;
 					}
-					ShapesHelper.rect(x * tileSize, y * tileSize, tileSize, tileSize, Color.blue);
+					//ShapesHelper.rect(x * tileSize, y * tileSize, tileSize, tileSize, Color.blue);
 				}
 			}
 		}

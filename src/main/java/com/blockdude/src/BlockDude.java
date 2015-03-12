@@ -2,14 +2,23 @@ package com.blockdude.src;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.net.URL;
+import java.nio.ByteBuffer;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
+import org.newdawn.slick.util.ResourceLoader;
+
+import static org.lwjgl.BufferUtils.*;
 
 import com.blockdude.src.screens.Screen;
 import com.blockdude.src.screens.Screens;
+
+import static com.blockdude.src.util.ImageUtils.*;
+
 import com.blockdude.src.util.input.InputHelper;
 
 public class BlockDude {
@@ -43,6 +52,16 @@ public class BlockDude {
 			e.printStackTrace();
 			this.exit();
 		}
+		
+		
+		try {
+			ByteBuffer[] list = new ByteBuffer[1];
+			list[0] = loadIcon(ResourceLoader.getResourceAsStream("textures/tree.png"));
+			Display.setIcon(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		setScreen(Screens.GAME);
 	}
 	
@@ -53,10 +72,13 @@ public class BlockDude {
 	    glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, -1, 1);
 	    glMatrixMode(GL_MODELVIEW);
 	    
+	    glEnable(GL_TEXTURE_2D);
+	    glEnable(GL_BLEND);
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	private void display() {
+		getDelta();
 		while(!Display.isCloseRequested()) {
 			int delta = getDelta();
 			if(delta >= TARGET_DELTA * 2) {
