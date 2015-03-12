@@ -2,7 +2,6 @@ package com.blockdude.src;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.net.URL;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.LWJGLException;
@@ -12,8 +11,6 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import org.newdawn.slick.util.ResourceLoader;
 
-import static org.lwjgl.BufferUtils.*;
-
 import com.blockdude.src.screens.Screen;
 import com.blockdude.src.screens.Screens;
 
@@ -22,7 +19,6 @@ import static com.blockdude.src.util.ImageUtils.*;
 import com.blockdude.src.util.input.InputHelper;
 
 public class BlockDude {
-	private static final int[] DIMENSIONS = {GlobalOptions.WIDTH, GlobalOptions.HEIGHT};
 	private static final int TARGET_FPS = 60;
 	private static final float TARGET_DELTA = (float) Math.floor(1000.0 / TARGET_FPS);
 	
@@ -36,24 +32,34 @@ public class BlockDude {
 		this.display();
 	}
 	
+	/**
+	 * Create the display window.
+	 */
 	private void createDisplay() {
 		try {
-			Display.setDisplayMode(new DisplayMode(DIMENSIONS[0], DIMENSIONS[1]));
-			if(GlobalOptions.useAA) {
+			Display.setDisplayMode(new DisplayMode(GlobalOptions.WIDTH, GlobalOptions.HEIGHT));
+			if (GlobalOptions.useAA) {
 				try {
 					Display.create(new PixelFormat(32, 0, 24, 0, 4));
-				} catch(Exception e) {
-					Display.create(); // in-case the computer doesn't support Anti-Alias
+				} catch (Exception e) {
+					Display.create();
 				}
 			} else {
 				Display.create();
 			}
-		} catch(LWJGLException e) {
+		} catch (LWJGLException e) {
 			e.printStackTrace();
 			this.exit();
 		}
-		
-		
+		this.setDisplayIcon();
+
+		setScreen(Screens.MAIN_MENU);
+	}
+	
+	/**
+	 * Set the display icon for the created window.
+	 */
+	private void setDisplayIcon() {
 		try {
 			ByteBuffer[] list = new ByteBuffer[1];
 			list[0] = loadIcon(ResourceLoader.getResourceAsStream("textures/tree.png"));
@@ -61,15 +67,16 @@ public class BlockDude {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		setScreen(Screens.GAME);
 	}
 	
+	/**
+	 * Set the initial values for openGL and create the viewport.
+	 */
 	private void initGL() {
-		glViewport(0, 0, DIMENSIONS[0], DIMENSIONS[1]);
+		glViewport(0, 0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT);
 		glMatrixMode(GL_PROJECTION);
 	    glLoadIdentity();
-	    glOrtho(0, DIMENSIONS[0], DIMENSIONS[1], 0, -1, 1);
+	    glOrtho(0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT, 0, -1, 1);
 	    glMatrixMode(GL_MODELVIEW);
 	    
 	    glEnable(GL_TEXTURE_2D);
@@ -77,11 +84,14 @@ public class BlockDude {
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
+	/**
+	 * A constantly running method that handles all the game code.
+	 */
 	private void display() {
 		getDelta();
-		while(!Display.isCloseRequested()) {
+		while (!Display.isCloseRequested()) {
 			int delta = getDelta();
-			if(delta >= TARGET_DELTA * 2) {
+			if (delta >= TARGET_DELTA * 2) {
 				delta = (int) TARGET_DELTA * 2;
 			}
 			delta /= TARGET_DELTA;
@@ -90,7 +100,7 @@ public class BlockDude {
 			
 			InputHelper.update();
 			
-			if(screen != null) {
+			if (screen != null) {
 				screen.update(delta);
 				screen.display(delta);
 			}
@@ -101,6 +111,11 @@ public class BlockDude {
 		Display.destroy();
 	}
 	
+	/**
+	 * Finds the time between the current frame and the previous frame.
+	 * 
+	 * @return The time between the current and previous frame.
+	 */
 	private int getDelta() {
 		long time = (Sys.getTime() * 1000) / Sys.getTimerResolution();
 		int delta = (int) (time - this.lastFrame);
@@ -109,16 +124,26 @@ public class BlockDude {
 		return delta;
 	}
 	
+	/**
+	 * Close the window and effectively end the program.
+	 */
 	private void exit() {
 		System.exit(0);
 	}
 	
+	/**
+	 * Set the active display screen of the game.
+	 * 
+	 * @param	screen	The screen you which to switch to.
+	 */
 	public static void setScreen(Screens screen) {
-		if(BlockDude.screen != null) BlockDude.screen.dispose();
+		if (BlockDude.screen != null) {
+			BlockDude.screen.dispose();
+		}
 		try {
 			BlockDude.screen = screen.getScreenClass().newInstance();
 			BlockDude.screen.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}

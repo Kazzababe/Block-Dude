@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -20,13 +19,13 @@ public class BumpMapTest {
 	private int fragmentShader;
 	private float time;
 	
-	public BumpMapTest(){
-		try{
+	public BumpMapTest() {
+		try {
 			Display.setDisplayMode(new DisplayMode(640, 640));
 			Display.setTitle("Shader Test");
 			Display.setVSyncEnabled(true);
 			Display.create(new PixelFormat(/*Alpha Bits*/4, /*Depth bits*/ 0, /*Stencil bits*/ 0, /*samples*/4));
-		}catch(LWJGLException e){
+		} catch(LWJGLException e) {
 			System.err.println("Couldn't create display");
 			e.printStackTrace(System.err);
 			quit(true);
@@ -39,27 +38,27 @@ public class BumpMapTest {
 		loop();
 	}
 	
-	private void quit(boolean error){
-		if(shaderProgram != 0){
-			glDeleteShader(vertexShader);
-			glDeleteShader(fragmentShader);
-			glDeleteProgram(shaderProgram);
+	private void quit(boolean error) {
+		if (this.shaderProgram != 0) {
+			glDeleteShader(this.vertexShader);
+			glDeleteShader(this.fragmentShader);
+			glDeleteProgram(this.shaderProgram);
 		}
 		
 		Display.destroy();
-		System.exit(error?1:0);
+		System.exit(error? 1 : 0);
 	}
 	
-	private void renderShader(){
-		glUseProgram(shaderProgram);
-		int timeUni = glGetUniformLocation(shaderProgram, "time");
+	private void renderShader() {
+		glUseProgram(this.shaderProgram);
+		int timeUni = glGetUniformLocation(this.shaderProgram, "time");
 	    glUniform1f(timeUni, time);
-	    int viewportUni = glGetUniformLocation(shaderProgram, "viewport");
+	    int viewportUni = glGetUniformLocation(this.shaderProgram, "viewport");
 	    glUniform2f(viewportUni, Display.getWidth(), Display.getHeight());
 	}
 	
-	private void renderShape(){
-		glBegin(GL_TRIANGLES);
+	private void renderShape() {
+		glBegin(GL_TRIANGLES); {
 			glColor3f(0, 0, 0);
 			glVertex2f(-1f, 1f);
 			glColor3f(0, 0, 0);
@@ -73,13 +72,13 @@ public class BumpMapTest {
 			glVertex2f(1f, -1f);
 			glColor3f(0, 0, 0);
 			glVertex2f(1f, 1f);
-		glEnd();
+		} glEnd();
 	}
 	
-	private void loop(){
+	private void loop() {
 		time = 0;
 
-		while(!Display.isCloseRequested()){
+		while (!Display.isCloseRequested()){
 			glClear(GL_COLOR_BUFFER_BIT);
 			
 			renderShader();
@@ -88,55 +87,55 @@ public class BumpMapTest {
 			glUseProgram(0);
 			Display.update();
 			Display.sync(60);
-			time+=0.01f;
+			time += 0.01f;
 		}
 		quit(false);
 	}
 	
-	private String readFile(String file){
+	private String readFile(String file) {
 		StringBuilder builder = new StringBuilder();
-		try{
+		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line;
 			
-			while((line = reader.readLine()) != null){
+			while ((line = reader.readLine()) != null) {
 				builder.append(line).append('\n');
 			}
 			
 			reader.close();
-		}catch(IOException e){
-			System.err.println("Error loading file: "+file);
+		} catch (IOException e) {
+			System.err.println("Error loading file: " + file);
 			quit(true);
 		}
 		return builder.toString();
 	}
 	
-	private boolean compileShader(int shader, String source){
+	private boolean compileShader(int shader, String source) {
 		glShaderSource(shader, source);
 		glCompileShader(shader);
-		return glGetShader(shader, GL_COMPILE_STATUS) == GL_FALSE ? false : true;
+		return !(glGetShader(shader, GL_COMPILE_STATUS) == GL_FALSE);
 	}
 	
-	private void createShaders(){
-		shaderProgram = glCreateProgram();
-		vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	private void createShaders() {
+		this.shaderProgram = glCreateProgram();
+		this.vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		this.fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		
 		String vertexShaderSource = readFile("src/main/java/Tests/bump.vertex");
 		String fragmentShaderSource = readFile("src/main/java/Tests/bump.fragment");
 		
-		boolean v = compileShader(vertexShader, vertexShaderSource);
-		boolean f = compileShader(fragmentShader, fragmentShaderSource);
+		boolean v = compileShader(this.vertexShader, vertexShaderSource);
+		boolean f = compileShader(this.fragmentShader, fragmentShaderSource);
 		
-		if(!v || !f){
-			System.out.println("Failed to compile shaders\nVertex Shader: "+v+"\nFragmentShader: " + f);
+		if (!v || !f) {
+			System.out.println("Failed to compile shaders\nVertex Shader: " + v + "\nFragmentShader: " + f);
 			quit(true);
 		}
 		
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		glLinkProgram(shaderProgram);
-		glValidateProgram(shaderProgram);
+		glAttachShader(this.shaderProgram, this.vertexShader);
+		glAttachShader(this.shaderProgram, this.fragmentShader);
+		glLinkProgram(this.shaderProgram);
+		glValidateProgram(this.shaderProgram);
 	}
 	
 	private static float pow(float x, int p){
@@ -180,13 +179,11 @@ public class BumpMapTest {
 		return new Object[]{z, clr};
 	}
 	
-	private void genTextures(){
+	private void genTextures() {
 		
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		new BumpMapTest();
 	}
-
 }

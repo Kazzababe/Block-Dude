@@ -51,17 +51,19 @@ public class InputHelper {
 	
 	public static void update() {
 		resetKeys();
-		for(int i = 0; i < keyboardEvents.length; i++) {
-			if(Keyboard.isKeyDown(i)) {
+		for (int i = 0; i < keyboardEvents.length; i++) {
+			if (Keyboard.isKeyDown(i)) {
 				keyboardEvents[i] = InputState.DOWN;
 			}
 		}
-		while(Keyboard.next()) {
+		while (Keyboard.next()) {
 			int key = Keyboard.getEventKey();
-			if(key < 0) continue;
+			if (key < 0) {
+				continue;
+			}
 			
-			if(Keyboard.getEventKeyState()) {
-				if(!Keyboard.isRepeatEvent()) {
+			if (Keyboard.getEventKeyState()) {
+				if (!Keyboard.isRepeatEvent()) {
 					keyboardEvents[key] = InputState.PRESSED;
 				}
 			} else {
@@ -70,16 +72,18 @@ public class InputHelper {
 		}
 		
 		resetMouse();
-		for(int i = 0; i < mouseEvents.length; i++) {
-			if(Mouse.isButtonDown(i)) {
+		for (int i = 0; i < mouseEvents.length; i++) {
+			if (Mouse.isButtonDown(i)) {
 				mouseEvents[i] = InputState.DOWN;
 			}
 		}
-		while(Mouse.next()) {
+		while (Mouse.next()) {
 			int button = Mouse.getEventButton();
-			if(button < 0) continue;
+			if (button < 0) {
+				continue;
+			}
 			
-			if(Mouse.getEventButtonState()) {
+			if (Mouse.getEventButtonState()) {
 				mouseEvents[button] = InputState.PRESSED;
 			} else {
 				mouseEvents[button] = InputState.RELEASED;

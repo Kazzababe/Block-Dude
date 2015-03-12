@@ -1,17 +1,8 @@
 package com.blockdude.src.renderer;
 
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL11.*;
 
-import java.nio.FloatBuffer;
-
-/**
- * Buffer utility that stores all buffers for an object
- *
- * @author Jocopa3 (Matt Staubus)
- */
 public class Buffer {
-	
     public final int[][] DrawBuffers;
 
     public int length;
@@ -68,12 +59,11 @@ public class Buffer {
         return this.DrawBuffers[buffer][BUFFER_LENGTH];
     }
 
-    //Returns whether deletion was successful or not
     public boolean deleteBuffer(int buffer) {
         try {
             glDeleteBuffers(this.DrawBuffers[buffer][BUFFER_ID]);
 
-            this.DrawBuffers[buffer] = new int[] {0,0}; // Seriously? This is legal?
+            this.DrawBuffers[buffer] = new int[] {0, 0};
 
             return true;
         } catch (Exception e) {
@@ -85,9 +75,9 @@ public class Buffer {
     //Returns whether deletion was successful or not
     public boolean deleteAllBuffers() {
         try {
-            for(int buffer = 0; buffer < TOTAL_BUFFERS; buffer++){
+            for (int buffer = 0; buffer < TOTAL_BUFFERS; buffer++) {
             	glDeleteBuffers(DrawBuffers[buffer][BUFFER_ID]);
-            	DrawBuffers[buffer] = new int[] {0,0};
+            	DrawBuffers[buffer] = new int[] {0, 0};
             }
             return true;
         } catch (Exception e) {

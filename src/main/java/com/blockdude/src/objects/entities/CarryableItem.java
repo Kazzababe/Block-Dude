@@ -3,7 +3,6 @@ package com.blockdude.src.objects.entities;
 import com.blockdude.src.levels.Level;
 
 public class CarryableItem extends Item {
-
 	private Entity owner;
 	
 	public CarryableItem(Level parentLevel, int id) {
@@ -18,6 +17,7 @@ public class CarryableItem extends Item {
 		this.owner = owner;
 	}
 	
-	
-
+	public Entity getOwner() {
+		return this.owner;
+	}
 }

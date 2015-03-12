@@ -7,6 +7,6 @@ public class StaticTile extends Tile{
 	public StaticTile(int id){
 		super(id);
 		
-		color = new Color((float)Math.random(), (float)Math.random(), (float)Math.random());
+		this.color = new Color((float) Math.random(), (float) Math.random(), (float) Math.random());
 	}
 }

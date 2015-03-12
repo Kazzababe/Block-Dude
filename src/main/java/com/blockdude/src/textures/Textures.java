@@ -14,7 +14,7 @@ public enum Textures {
 		this.path = path;
 		try {
 			this.texture = TextureLoader.getTexture(path.substring(path.indexOf(".") + 1, path.length()).toUpperCase(), ResourceLoader.getResourceAsStream(path));
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

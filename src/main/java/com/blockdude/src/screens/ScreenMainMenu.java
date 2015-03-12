@@ -9,14 +9,14 @@ import com.blockdude.src.gui.GuiMainMenuTextButton;
 public class ScreenMainMenu extends Screen {
 	@Override
 	public void update(float delta) {
-		for(GuiButton button : this.buttons) {
+		for (GuiButton button : this.buttons) {
 			button.update();
 		}
 	}
 
 	@Override
 	public void display(float delta) {
-		for(GuiButton button : this.buttons) {
+		for (GuiButton button : this.buttons) {
 			button.render();
 		}
 	}
@@ -28,10 +28,9 @@ public class ScreenMainMenu extends Screen {
 	
 	@Override
 	public void onButtonClick(GuiButton button) {
-		switch(button.getId()) {
+		switch (button.getId()) {
 			case 0:
-				BlockDude.setScreen(Screens.MAIN_MENU);
-				System.out.println("CLICK 0");
+				BlockDude.setScreen(Screens.GAME);
 				break;
 		}
 	}

@@ -7,5 +7,4 @@ public class Torch extends TileEntity {
 	public Torch(Level parentLevel, int id) {
 		super(parentLevel, id);
 	}
-
 }

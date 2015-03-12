@@ -1,7 +1,7 @@
 package com.blockdude.src.objects.entities;
 
 import com.blockdude.src.levels.Level;
-import com.blockdude.src.objects.Texture;
+import com.blockdude.src.textures.Textures;
 
 import org.newdawn.slick.geom.*;
 
@@ -15,10 +15,10 @@ public class Entity {
 	public Vector2f motion = new Vector2f(0,0);
 	public Vector2f pos = new Vector2f(0,0);
 	public Vector2f lastPos = new Vector2f(0,0);
-	public Vector2f friction = new Vector2f(0.95f,0.95f);
+	public Vector2f friction = new Vector2f(0.9f,0.9f);
 	
 	public Shape shape;
-	public Texture texture;
+	public Textures texture;
 	
 	public Entity(Level parentLevel, int id){
 		this(parentLevel);
@@ -33,6 +33,14 @@ public class Entity {
 	
 	private Entity(Level parentLevel) {
 		this.parentLevel = parentLevel;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public int getData() {
+		return this.data;
 	}
 
 	public void render(float delta) {

@@ -18,7 +18,7 @@ public class GuiMainMenuTextButton extends GuiButton {
 	@Override
 	public void render() {
 		Fonts.CENTURY_GOTHIC.drawCenteredString(22, this.getX(), this.getY(), this.getText(), Color.white);
-		if(this.isActive()) {
+		if (this.isActive()) {
 			float width = Fonts.CENTURY_GOTHIC.getFont(22).getWidth(this.getText());
 			float halfWidth = width / 2;
 			ShapesHelper.triangle(this.getX() - halfWidth - 10, this.getY(), this.getX() - halfWidth - 20, this.getY() - 6, this.getX() - halfWidth - 20, this.getY() + 6, Color.white);

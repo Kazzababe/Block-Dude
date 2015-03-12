@@ -21,32 +21,60 @@ public abstract class GuiButton {
 		this.y = y;
 	}
 	
+	/**
+	 * The id of the button to be used by the parent class.
+	 * 
+	 * @return	The button's id.
+	 */
 	public int getId() {
 		return this.id;
 	}
 	
+	/**
+	 * The text that is displayed when the button is drawn.
+	 * 
+	 * @return	The button's text.
+	 */
 	public String getText() {
 		return this.text;
 	}
 	
+	/**
+	 * The x location where the button is drawn.
+	 * 
+	 * @return	The button's x location.
+	 */
 	public float getX() {
 		return this.x;
 	}
 	
+	/**
+	 * The y location where the button is drawn.
+	 * 
+	 * @return	The button's y location.
+	 */
 	public float getY() {
 		return this.y;
 	}
 	
+	/**
+	 * The method that is called every tick meant to handle logic updates for the button.
+	 */
 	public void update() {
 		this.active = isInside(Mouse.getX(), Display.getHeight() - Mouse.getY());
-		if(InputHelper.isMousePressed(0) && this.active) {
+		if (InputHelper.isMousePressed(0) && this.active) {
 			this.onMouseClick();
 		}
-		if(InputHelper.isMouseReleased(0) && this.active) {
+		if (InputHelper.isMouseReleased(0) && this.active) {
 			this.onMouseRelease();
 		}
 	}
 	
+	/**
+	 * Whether or not the button is currently being hovered over or not.
+	 * 
+	 * @return	The mouse is over the button.
+	 */
 	public boolean isActive() {
 		return this.active;
 	}

@@ -15,33 +15,22 @@ public class BufferProperties {
     public final int VERTEX_SIZE; //Amount of components per vertex (X,Y,Z,R,G,B,U,V)
     public final int VERTEX_BYTE_SIZE;
     
-    public BufferProperties(boolean draw, boolean color, boolean texture, int vert, int col, int tex, int mode, int size, int bytes){
-    	drawing = draw;
-    	coloring = color;
-    	texturing = texture;
+    public BufferProperties(boolean draw, boolean color, boolean texture, int vert, int col, int tex, int mode, int size, int bytes) {
+    	this.drawing = draw;
+    	this.coloring = color;
+    	this.texturing = texture;
     	
-    	vertexStart = vert;
-    	colorStart = col;
-    	textureStart = tex;
+    	this.vertexStart = vert;
+    	this.colorStart = col;
+    	this.textureStart = tex;
     	
-    	drawMode = mode;
+    	this.drawMode = mode;
     	
-    	VERTEX_SIZE = size;
-    	VERTEX_BYTE_SIZE = bytes;
+    	this.VERTEX_SIZE = size;
+    	this.VERTEX_BYTE_SIZE = bytes;
     }
     
-    public BufferProperties(BufferProperties props){
-    	drawing = props.drawing;
-    	coloring = props.coloring;
-    	texturing = props.texturing;
-    	
-    	vertexStart = props.vertexStart;
-    	colorStart = props.colorStart;
-    	textureStart = props.textureStart;
-    	
-    	drawMode = props.drawMode;
-    	
-    	VERTEX_SIZE = props.VERTEX_SIZE;
-    	VERTEX_BYTE_SIZE = props.VERTEX_BYTE_SIZE;
+    public BufferProperties(BufferProperties props) {
+    	this(props.drawing, props.coloring, props.texturing, props.vertexStart, props.colorStart, props.textureStart, props.drawMode, props.VERTEX_SIZE, props.VERTEX_BYTE_SIZE);
     }
 }
