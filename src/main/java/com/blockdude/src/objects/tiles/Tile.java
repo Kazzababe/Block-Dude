@@ -7,8 +7,10 @@ public class Tile {
 	public static final Tile[] tiles = new Tile[256];
 	public static final Tile emtpyTile = new EmptyTile(0);
 	public static final Tile staticTile = new StaticTile(1);
+	public static final Tile exitTile = new ExitTile(2);
 	
-	public boolean isAnimated = false;
+	protected boolean isAnimated = false;
+	protected boolean isSolidTile = true;
 	
 	public final int id;
 	public final int data;
@@ -49,6 +51,14 @@ public class Tile {
 		this.data = data;
 		
 		tiles[id] = this;
+	}
+	
+	public boolean isAnimated(){
+		return this.isAnimated;
+	}
+	
+	public boolean isSolid(){
+		return this.isSolidTile;
 	}
 	
 	public Shape getShape(float x, float y, float size){

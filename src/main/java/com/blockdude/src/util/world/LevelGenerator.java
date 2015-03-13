@@ -31,6 +31,22 @@ public class LevelGenerator {
 		return tiles;
 	}
 	
+	public static Tile[][] placeRandomExit(Tile[][] tiles) {
+		int x, y, width = tiles.length - 2, height = tiles[0].length - 3;
+		
+		int i = -1;
+		while(i++ < width*height*2) {
+			x = (int) (Math.random() * width + 1);
+			y = (int) (Math.random() * height + 2);
+			if(y > 0 && tiles[x][y] != null && tiles[x][y] != Tile.emtpyTile) {
+				tiles[x][y-1] = Tile.exitTile;
+				break;
+			}
+		}
+		
+		return tiles;
+	}
+	
 	public static Tile[][] createRandomWorld(int width, int height) {
 		return createRandomWorld(width, height, (int) (Math.random() * width * height * 0.3f));
 	}
@@ -40,16 +56,19 @@ public class LevelGenerator {
 		
 		tiles = addBorder(tiles);
 		
+		int x, y;
 		for (int i = 0; i < randomBlocks; i++) {
-			int x = (int) (Math.random() * width);
-			int y = (int) (Math.random() * height);
+			x = (int) (Math.random() * width);
+			y = (int) (Math.random() * height);
 			
-			if (tiles[x][y] != null) {
+			if (tiles[x][y] != null && tiles[x][y] != Tile.emtpyTile) {
 				i--;
 				continue;
 			}
 			tiles[x][y] = Tile.staticTile;
 		}
+		
+		tiles = placeRandomExit(tiles);
 		
 		return tiles;
 	}

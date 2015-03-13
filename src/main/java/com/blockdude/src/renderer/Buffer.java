@@ -5,8 +5,6 @@ import static org.lwjgl.opengl.GL15.*;
 public class Buffer {
     public final int[][] DrawBuffers;
 
-    public int length;
-
     public static final int TOTAL_BUFFERS = 4;
     public static final int STATIC_BUFFER = 0;
     public static final int DYNAMIC_BUFFER = 1;

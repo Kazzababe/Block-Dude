@@ -63,8 +63,16 @@ public class Player extends Entity {
 		if (InputHelper.isKeyDown(Keyboard.KEY_RIGHT) || InputHelper.isKeyDown(Keyboard.KEY_D)) {
 			this.motion.x = Math.min(this.motion.x + this.speed.x * delta, MAX_SPEED);
 		}
+		if (InputHelper.isKeyDown(Keyboard.KEY_UP) || InputHelper.isKeyDown(Keyboard.KEY_W)) {
+			// Pickup item or enter a door
+		}
+		if (InputHelper.isKeyDown(Keyboard.KEY_DOWN) || InputHelper.isKeyDown(Keyboard.KEY_S)) {
+			// Put item down
+		}
 	}
 	
+	// If you're just going to do this, then what's the point of use shapes at all
+	// if not for their collision method?
 	private boolean collides(Shape s1, Shape s2) {
 		return !(s2.getX() >= s1.getMaxX() || 
 				s2.getMaxX() <= s1.getX() || 
@@ -80,13 +88,14 @@ public class Player extends Entity {
 		Tile[][] tiles = this.getParentLevel().getTiles();
 		for (int x = (int) (this.pos.x / tileSize) - 2; x < this.pos.x / tileSize + 2; x++) {
 			for (int y = (int) (this.pos.y / tileSize) - 2; y < this.pos.y / tileSize + 2; y++) {
-				if (x < 0 || x >= width || y < 0 || y >= height || tiles[x][y] == null) {
+				if (x < 0 || x >= width || y < 0 || y >= height || tiles[x][y] == null || !tiles[x][y].isSolid()) {
 					continue;
 				}
 				
 				tileShape = tiles[x][y].getShape(x*  tileSize + 0.1f, y * tileSize + 0.1f, tileSize - 0.2f);
 				
-				if (this.collides(this.shape, tileShape)) {
+				//if (this.collides(this.shape, tileShape)) {
+				if (this.shape.intersects(tileShape) || tileShape.contains(this.shape)) {
 					if (xv < 0) {
 						this.pos.x = x * tileSize + tileSize;
 						this.motion.x = 0;

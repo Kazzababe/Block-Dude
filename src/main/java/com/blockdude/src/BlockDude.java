@@ -38,7 +38,7 @@ public class BlockDude {
 	private void createDisplay() {
 		try {
 			Display.setDisplayMode(new DisplayMode(GlobalOptions.WIDTH, GlobalOptions.HEIGHT));
-			if (GlobalOptions.useAA) {
+			if (GlobalOptions.USE_ANTI_ALIAS) {
 				try {
 					Display.create(new PixelFormat(32, 0, 24, 0, 4));
 				} catch (Exception e) {
@@ -47,6 +47,7 @@ public class BlockDude {
 			} else {
 				Display.create();
 			}
+			Display.setResizable(true);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			this.exit();
@@ -67,6 +68,13 @@ public class BlockDude {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void resize(){
+		GlobalOptions.WIDTH = Display.getWidth();
+		GlobalOptions.HEIGHT = Display.getHeight();
+		            
+		glViewport(0, 0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT);
 	}
 	
 	/**
@@ -96,6 +104,11 @@ public class BlockDude {
 			}
 			delta /= TARGET_DELTA;
 			if(delta == 0) delta = 1;
+			
+			if (Display.wasResized()) {
+				resize();
+			}
+			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			
 			InputHelper.update();
