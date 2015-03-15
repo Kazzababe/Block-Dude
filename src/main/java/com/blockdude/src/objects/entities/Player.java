@@ -1,6 +1,10 @@
 package com.blockdude.src.objects.entities;
 
 import org.lwjgl.input.Keyboard;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
+
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.ShapeRenderer;
@@ -9,6 +13,7 @@ import org.newdawn.slick.geom.Vector2f;
 import com.blockdude.src.levels.Level;
 import com.blockdude.src.levels.World;
 import com.blockdude.src.objects.tiles.Tile;
+import com.blockdude.src.textures.Textures;
 import com.blockdude.src.util.input.InputHelper;
 
 public class Player extends Entity {
@@ -25,30 +30,51 @@ public class Player extends Entity {
 		
 		this.speed = new Vector2f(0.5F, 0.5F);
 		this.pos = new Vector2f(300F, 300F);
-		this.shape = new Rectangle(0, 0, 16, 28);
+		this.shape = new Rectangle(0, 0, 11.45f, 28);
 	}
 
 	@Override
 	public void render(float delta){
-	    ShapeRenderer.draw(shape);
+	    //ShapeRenderer.draw(shape);
+		Textures.BLOCKDUDE.getTexture().bind();
+		
+		// Eww, immediate mode...
+		glColor4f(1,1,1,1);
+		glBegin(GL_TRIANGLES); {
+			glTexCoord2f(0,0);
+			glVertex2f(this.shape.getMinX(), this.shape.getMinY());
+			glTexCoord2f(0,0.6875f);
+			glVertex2f(this.shape.getMinX(), this.shape.getMaxY());
+			glTexCoord2f(0.5625f,0.6875f);
+			glVertex2f(this.shape.getMaxX(), this.shape.getMaxY());
+			
+			glTexCoord2f(0.5625f,0.6875f);
+			glVertex2f(this.shape.getMaxX(), this.shape.getMaxY());
+			glTexCoord2f(0.5625f,0);
+			glVertex2f(this.shape.getMaxX(), this.shape.getMinY());
+			glTexCoord2f(0,0);
+			glVertex2f(this.shape.getMinX(), this.shape.getMinY());
+		}
+		glEnd();
 	}
 	
 	@Override
 	public void update(float delta) {
 		// Handle this input
 		this.controls(delta);
+		
 		// Update this position
 		this.motion.x += World.GRAVITY.x * delta;
 		this.motion.y += World.GRAVITY.y * delta;
 		
 		this.pos.x += this.motion.x;
 		this.shape.setLocation(this.pos);
-		this.solveCollisions(this.motion.x, 0);
+		this.solveTileCollisions(this.motion.x, 0);
 		
 		this.isOnGround = false;
 		this.pos.y += this.motion.y;
 		this.shape.setLocation(this.pos);
-		this.solveCollisions(0, this.motion.y);
+		this.solveTileCollisions(0, this.motion.y);
 		
 		this.motion.x *= this.friction.x * delta;
 	}
@@ -65,6 +91,7 @@ public class Player extends Entity {
 		}
 		if (InputHelper.isKeyDown(Keyboard.KEY_UP) || InputHelper.isKeyDown(Keyboard.KEY_W)) {
 			// Pickup item or enter a door
+			
 		}
 		if (InputHelper.isKeyDown(Keyboard.KEY_DOWN) || InputHelper.isKeyDown(Keyboard.KEY_S)) {
 			// Put item down
@@ -80,7 +107,7 @@ public class Player extends Entity {
 				s2.getMaxY() <= s1.getY());
 	}
 	
-	private void solveCollisions(float xv, float yv) {
+	private void solveTileCollisions(float xv, float yv) {
 		Shape tileShape;
 		int tileSize = Level.TILE_SIZE;
 		int width = this.getParentLevel().getTiles().length;

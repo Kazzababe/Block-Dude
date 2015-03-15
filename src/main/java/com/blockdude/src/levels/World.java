@@ -34,4 +34,8 @@ public class World {
 	public void setLevel(int index, Level level) {
 		this.levels.add(level);
 	}
+	
+	public void dispose() {
+		this.levels.get(this.currentLevel).dispose();
+	}
 }

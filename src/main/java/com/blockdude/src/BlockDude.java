@@ -11,6 +11,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import org.newdawn.slick.util.ResourceLoader;
 
+import com.blockdude.src.io.LevelDB;
 import com.blockdude.src.screens.Screen;
 import com.blockdude.src.screens.Screens;
 
@@ -70,11 +71,18 @@ public class BlockDude {
 		}
 	}
 	
-	private void resize(){
+	/**
+	 * Resize the window to a new width and height
+	 */
+	private void resize() {
 		GlobalOptions.WIDTH = Display.getWidth();
 		GlobalOptions.HEIGHT = Display.getHeight();
 		            
-		glViewport(0, 0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT);
+		glViewport(0, 0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT); //NEW
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT, 0, -1, 1);
+
 	}
 	
 	/**
@@ -122,7 +130,11 @@ public class BlockDude {
 			Display.sync(TARGET_FPS);
 		}
 		Display.destroy();
+		
+		exit();
 	}
+	
+	
 	
 	/**
 	 * Finds the time between the current frame and the previous frame.
@@ -141,6 +153,8 @@ public class BlockDude {
 	 * Close the window and effectively end the program.
 	 */
 	private void exit() {
+		BlockDude.screen.dispose();
+		LevelDB.instance.close();
 		System.exit(0);
 	}
 	

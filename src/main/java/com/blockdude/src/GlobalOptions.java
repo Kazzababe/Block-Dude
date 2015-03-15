@@ -8,4 +8,7 @@ public class GlobalOptions {
 	// Options for physics engine
 	public static float GRAVITY = 0.25f;
 	public static float TERMINAL_VELOCITY = 32.0f;
+	
+	// Max amount of vertices any shape may have
+	public static int MAX_VERTICES = 18;
 }

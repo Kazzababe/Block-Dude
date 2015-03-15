@@ -62,11 +62,12 @@ public class Level {
 	}
 	
 	public void createStaticBuffer() {
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(this.width * this.height * 5 * 6);
+		int s = TILE_SIZE, m = GlobalOptions.MAX_VERTICES;
+		
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(this.width * this.height * 5 * m);
 		
 		Tile t;
 		int x, y;
-		int s = TILE_SIZE;
 		int totalVertices = 0;
 		for (x = 0; x < this.tiles.length; x++) {
 			for (y = 0; y < this.tiles[x].length; y++) {
@@ -77,7 +78,7 @@ public class Level {
 				}
 				
 				// Loop through vertices as tiles may have arbitrary shapes
-				for(int i = 0, j = 0; i < t.Vertices.length; i += 3, j += 2) {
+				for(int i = 0, j = 0; i < t.Vertices.length && i < m; i += 3, j += 2) {
 					buffer.put(s * (t.Vertices[i] + x)); buffer.put(s * (t.Vertices[i + 1] + y)); buffer.put(t.Vertices[i + 2]);
 					buffer.put(t.UVs[j]); buffer.put(t.UVs[j + 1]);
 					
@@ -90,8 +91,8 @@ public class Level {
 		this.buffers.setBufferIDAndLength(STATIC_BUFFER, glGenBuffers(), totalVertices);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, this.buffers.getBufferID(STATIC_BUFFER));
-	    glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-	    
+		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+		
 	    glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	
@@ -123,7 +124,6 @@ public class Level {
 		if (scroll.y < this.scrollStart) { // Up
 			this.levelScroll.y += scroll.y - this.scrollStart;
 		}
-		System.out.println(this.scrollStart +" "+(this.width * TILE_SIZE) + " " + (this.height * TILE_SIZE) +"\n"+this.levelScroll.toString()+"\n");
 		
 		int maxX = (this.width - GlobalOptions.WIDTH / TILE_SIZE + 1) * TILE_SIZE;
 		int maxY = (this.height - GlobalOptions.HEIGHT / TILE_SIZE) * TILE_SIZE;
@@ -141,6 +141,8 @@ public class Level {
 	private void renderTiles() {
 		glColor4f(1, 1, 1, 1);
 		Textures.TEST.getTexture().bind();
+		glEnable(GL_BLEND);
+	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -156,5 +158,9 @@ public class Level {
 
 	    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	    glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	
+	public void dispose() {
+		this.buffers.deleteAllBuffers();
 	}
 }

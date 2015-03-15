@@ -25,7 +25,10 @@ public class ScreenGame extends Screen {
 	}
 
 	@Override
-	public void dispose() {}
+	public void dispose() {
+		this.currentWorld.dispose();
+	}
+	
 	@Override
 	public void show() {}
 	
