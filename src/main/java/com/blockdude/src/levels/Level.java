@@ -49,11 +49,11 @@ public class Level {
 		this.parent = parent;
 		this.tiles = LevelGenerator.createRandomWorld(
 				(int) (GlobalOptions.WIDTH / TILE_SIZE) * 2,
-				(int) (GlobalOptions.HEIGHT / TILE_SIZE), 0);
+				(int) (GlobalOptions.HEIGHT / TILE_SIZE));
 		this.width = this.tiles.length;
 		this.height = this.tiles[0].length;
 
-		this.spawn = this.findOpenSpot();
+		this.spawn = this.findOpenSpot(0, 0);
 		this.player = new Player(this, 0);
 		this.player.pos.set(spawn);
 
@@ -64,13 +64,15 @@ public class Level {
 				* TILE_SIZE, this.height * TILE_SIZE));
 		
 		this.entities = new ArrayList<Entity>();
-		this.entities.add(new TileEntity(this, 0));
+		Entity e = new TileEntity(this, 0);
+		e.pos.set(this.findOpenSpot(6, 2));
+		this.entities.add(e);
 	}
 
-	public Vector2f findOpenSpot() {
+	public Vector2f findOpenSpot(int xStart, int yStart) {
 		Tile t;
-		for (int x = 0; x < this.width; x++) {
-			for (int y = 0; y < this.height; y++) {
+		for (int x = xStart; x < this.width; x++) {
+			for (int y = yStart; y < this.height; y++) {
 				t = this.tiles[x][y];
 				if (t == null || t == Tile.emtpyTile) {
 					return new Vector2f(x * TILE_SIZE, y * TILE_SIZE);

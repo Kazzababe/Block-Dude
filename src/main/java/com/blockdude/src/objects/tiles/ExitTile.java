@@ -30,13 +30,13 @@ public class ExitTile extends Tile {
 	public void setUVs(){
 		this.UVs = new float[]{
 				// Left bottom triangle
-				0f, 0f,
-				0f, 0f,
-				0f, 0f,
+				0.5f, 0.9f,
+				0.5f, 0.9f,
+				0.5f, 0.9f,
 				// Right top triangle
-				0f, 0f,
-				0f, 0f,
-				0f, 0f
+				0.5f, 0.9f,
+				0.5f, 0.9f,
+				0.5f, 0.9f
 		};
 	}
 
