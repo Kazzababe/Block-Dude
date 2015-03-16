@@ -3,7 +3,6 @@ package com.blockdude.src.objects.entities;
 import org.lwjgl.input.Keyboard;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
 
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
@@ -27,6 +26,7 @@ public class Player extends Entity {
 	
 	public Player(Level parentLevel, int id) {
 		super(parentLevel, id);
+		this.type = EntityType.MOB_ENTITY;
 		
 		this.speed = new Vector2f(0.5F, 0.5F);
 		this.pos = new Vector2f(300F, 300F);
@@ -38,7 +38,7 @@ public class Player extends Entity {
 	    //ShapeRenderer.draw(shape);
 		Textures.BLOCKDUDE.getTexture().bind();
 		
-		// Eww, immediate mode...
+		// Eww, immediate mode... will change later
 		glColor4f(1,1,1,1);
 		glBegin(GL_TRIANGLES); {
 			glTexCoord2f(0,0);
@@ -98,6 +98,14 @@ public class Player extends Entity {
 		}
 	}
 	
+	@Override
+	public void handleCollision(Entity entity) {
+		this.solveEntityCollision(entity, this.motion.x, 0);
+		
+		this.isOnGround = false;
+		this.solveEntityCollision(entity, 0, this.motion.y);
+	}
+	
 	// If you're just going to do this, then what's the point of use shapes at all
 	// if not for their collision method?
 	private boolean collides(Shape s1, Shape s2) {
@@ -105,6 +113,31 @@ public class Player extends Entity {
 				s2.getMaxX() <= s1.getX() || 
 				s2.getY() >= s1.getMaxY() || 
 				s2.getMaxY() <= s1.getY());
+	}
+	
+	private void solveEntityCollision(Entity e, float xv, float yv) {
+		Shape entityShape = e.shape;
+
+		// if (this.collides(this.shape, tileShape)) {
+		if (this.shape.intersects(entityShape) || entityShape.contains(this.shape)) {
+			if (xv < 0) {
+				this.pos.x = entityShape.getX() + entityShape.getWidth();
+				this.motion.x = 0;
+			}
+			if (xv > 0) {
+				this.pos.x = entityShape.getX() - this.shape.getWidth();
+				this.motion.x = 0;
+			}
+			if (yv < 0) {
+				this.pos.y = entityShape.getY() + entityShape.getHeight();
+				this.motion.y = 0;
+			}
+			if (yv > 0) {
+				this.pos.y = entityShape.getY() - this.shape.getHeight();
+				this.isOnGround = true;
+				this.motion.y = 0;
+			}
+		}
 	}
 	
 	private void solveTileCollisions(float xv, float yv) {
@@ -119,7 +152,7 @@ public class Player extends Entity {
 					continue;
 				}
 				
-				tileShape = tiles[x][y].getShape(x*  tileSize + 0.1f, y * tileSize + 0.1f, tileSize - 0.2f);
+				tileShape = tiles[x][y].getShape(x * tileSize + 0.1f, y * tileSize + 0.1f, tileSize - 0.2f);
 				
 				//if (this.collides(this.shape, tileShape)) {
 				if (this.shape.intersects(tileShape) || tileShape.contains(this.shape)) {

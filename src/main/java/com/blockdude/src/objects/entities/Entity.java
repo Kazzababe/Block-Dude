@@ -6,6 +6,7 @@ import com.blockdude.src.textures.Textures;
 import org.newdawn.slick.geom.*;
 
 public class Entity {
+	
 	private int id;
 	private int data;
 	
@@ -19,6 +20,8 @@ public class Entity {
 	
 	public Shape shape;
 	public Textures texture;
+	
+	public EntityType type = EntityType.NULL_ENTITY;
 	
 	public Entity(Level parentLevel, int id){
 		this(parentLevel);
@@ -45,7 +48,7 @@ public class Entity {
 
 	public void render(float delta) {
 		//texture.render();
-		//ShapeRenderer.draw(shape);
+		ShapeRenderer.draw(shape);
 	}
 
 	public void update(float delta) {
@@ -58,5 +61,13 @@ public class Entity {
 	
 	public Level getParentLevel() {
 		return this.parentLevel;
+	}
+	
+	public boolean collidesWith(Entity e) {
+		return this.shape.intersects(e.shape) || this.shape.contains(e.shape);
+	}
+	
+	public void handleCollision(Entity e) {
+		
 	}
 }

@@ -74,8 +74,10 @@ public class Buffer {
     public boolean deleteAllBuffers() {
         try {
             for (int buffer = 0; buffer < TOTAL_BUFFERS; buffer++) {
-            	glDeleteBuffers(DrawBuffers[buffer][BUFFER_ID]);
-            	DrawBuffers[buffer] = new int[] {0, 0};
+            	if(DrawBuffers != null && DrawBuffers[buffer] != null) {
+            		glDeleteBuffers(DrawBuffers[buffer][BUFFER_ID]);
+            		DrawBuffers[buffer] = new int[] {0, 0};
+            	}
             }
             return true;
         } catch (Exception e) {
