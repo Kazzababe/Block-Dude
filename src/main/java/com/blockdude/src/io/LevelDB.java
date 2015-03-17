@@ -34,7 +34,7 @@ public class LevelDB {
     }
     
     public void put(byte[] key, byte[] data) {
-    	db.put(key, data);
+    	this.db.put(key, data);
     }
     
     public byte[] get(byte[] key) {
@@ -43,7 +43,7 @@ public class LevelDB {
     
     public void close() {
     	try {
-			db.close();
+			this.db.close();
 		} catch (IOException e) {
 			// Uh... shoot
 			e.printStackTrace();

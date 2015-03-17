@@ -111,12 +111,12 @@ public class BlockDude {
 				delta = (int) TARGET_DELTA * 2;
 			}
 			delta /= TARGET_DELTA;
-			if(delta == 0) delta = 1;
-			
+			if (delta == 0) {
+				delta = 1;
+			}
 			if (Display.wasResized()) {
 				resize();
 			}
-			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			
 			InputHelper.update();

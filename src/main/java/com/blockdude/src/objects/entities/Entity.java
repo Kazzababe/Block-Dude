@@ -1,6 +1,7 @@
 package com.blockdude.src.objects.entities;
 
 import com.blockdude.src.levels.Level;
+import com.blockdude.src.textures.TextureHelper;
 import com.blockdude.src.textures.Textures;
 
 import org.newdawn.slick.geom.*;
@@ -47,7 +48,7 @@ public class Entity {
 	}
 
 	public void render(float delta) {
-		//texture.render();
+		TextureHelper.drawTexture(this.texture, this.pos.x, this.pos.y);
 		ShapeRenderer.draw(shape);
 	}
 

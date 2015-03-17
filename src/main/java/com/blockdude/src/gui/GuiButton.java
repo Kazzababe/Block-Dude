@@ -1,7 +1,6 @@
 package com.blockdude.src.gui;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 
 import com.blockdude.src.GlobalOptions;
 import com.blockdude.src.util.input.InputHelper;

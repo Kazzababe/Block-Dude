@@ -1,12 +1,16 @@
 package com.blockdude.src.screens;
 
 import org.lwjgl.opengl.Display;
+import org.newdawn.slick.Music;
+import org.newdawn.slick.SlickException;
 
 import com.blockdude.src.BlockDude;
 import com.blockdude.src.gui.GuiButton;
 import com.blockdude.src.gui.GuiMainMenuTextButton;
 
 public class ScreenMainMenu extends Screen {
+	private Music music;
+	
 	@Override
 	public void update(float delta) {
 		for (GuiButton button : this.buttons) {
@@ -38,7 +42,16 @@ public class ScreenMainMenu extends Screen {
 	@Override
 	public void show() {
 		this.buttons.clear();
-		this.buttons.add(new GuiMainMenuTextButton(this, 0, "START", Display.getWidth() / 2, Display.getHeight() / 2 - 12));
-		this.buttons.add(new GuiMainMenuTextButton(this, 1, "QUIT", Display.getWidth() / 2, Display.getHeight() / 2 + 12));
+		this.buttons.add(new GuiMainMenuTextButton(this, 0, "START", Display.getWidth() / 2, Display.getHeight() / 2 - 23));
+		this.buttons.add(new GuiMainMenuTextButton(this, 1, "OPTIONS", Display.getWidth() / 2, Display.getHeight() / 2));
+		this.buttons.add(new GuiMainMenuTextButton(this, 2, "QUIT", Display.getWidth() / 2, Display.getHeight() / 2 + 23));
+		
+		try {
+			this.music = new Music("music/main_menu.ogg");
+			this.music.fade(1500, 1.0F, false);
+			this.music.loop();
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 }
