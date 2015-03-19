@@ -1,31 +1,25 @@
 package com.blockdude.src.util;
 
-import java.util.Date;
-
 public class Timer {
 	
 	public long startTime;
 	public long endTime;
 	public long totalTime;
 	
-	public long getTime(){
-		
-		return new Date().getTime();
+	public long getTime() {
+		return System.currentTimeMillis() - startTime;
 	}
 	
-	public void setStartTime(long time) {
-		startTime = time;
+	public void startTime(){
+		startTime = System.currentTimeMillis();
 	}
 	
-	public void setEndTime(long time) {
+	public long stopTime(long time) {
 		endTime = time;
+		return getTotalTime();
 	}
+	
 	public long getTotalTime() {
-		totalTime = endTime - startTime;
-		
-		return totalTime;
+		return endTime - startTime;
 	}
 }
-
-
-
