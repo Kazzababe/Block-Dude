@@ -86,7 +86,7 @@ public class Player extends Entity {
 	}
 	
 	private void controls(float delta) {
-		if (InputHelper.isKeyDown(Keyboard.KEY_SPACE) && this.isOnGround) { 
+		if ((InputHelper.isKeyDown(Keyboard.KEY_SPACE) || InputHelper.isKeyDown(Keyboard.KEY_UP) || InputHelper.isKeyDown(Keyboard.KEY_W)) && this.isOnGround) { 
 			this.motion.y -= JUMP_HEIGHT;
 		}
 		if (InputHelper.isKeyDown(Keyboard.KEY_LEFT) || InputHelper.isKeyDown(Keyboard.KEY_A)) {
@@ -96,10 +96,6 @@ public class Player extends Entity {
 		if (InputHelper.isKeyDown(Keyboard.KEY_RIGHT) || InputHelper.isKeyDown(Keyboard.KEY_D)) {
 			this.motion.x = Math.min(this.motion.x + this.speed.x * delta, MAX_SPEED);
 			this.facingRight = true;
-		}
-		if (InputHelper.isKeyDown(Keyboard.KEY_UP) || InputHelper.isKeyDown(Keyboard.KEY_W)) {
-			// Pickup item or enter a door
-			
 		}
 		if (InputHelper.isKeyDown(Keyboard.KEY_DOWN) || InputHelper.isKeyDown(Keyboard.KEY_S)) {
 			// Put item down

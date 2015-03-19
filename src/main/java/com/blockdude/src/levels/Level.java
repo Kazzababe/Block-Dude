@@ -8,13 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import com.blockdude.src.GlobalOptions;
-import com.blockdude.src.fonts.Fonts;
 import com.blockdude.src.objects.QuadTree;
 import com.blockdude.src.objects.QuadTreeObject;
 import com.blockdude.src.objects.entities.Entity;
@@ -22,7 +20,6 @@ import com.blockdude.src.objects.entities.Player;
 import com.blockdude.src.objects.entities.TileEntity;
 import com.blockdude.src.objects.tiles.Tile;
 import com.blockdude.src.renderer.Buffer;
-import com.blockdude.src.util.Timer;
 import com.blockdude.src.util.VectorUtil;
 
 import static com.blockdude.src.renderer.Buffer.*;
@@ -32,8 +29,7 @@ import com.blockdude.src.util.world.LevelGenerator;
 
 public class Level {
 	public static final int TILE_SIZE = 32;
-	
-	private Timer timer;
+
 	private World parent;
 	private Player player;
 	private Vector2f spawn;
@@ -50,10 +46,6 @@ public class Level {
 	private List<Entity> entities;
 
 	public Level(World parent) {
-		//Timer Initialization
-		this.timer = new Timer();
-		this.timer.startTime();
-		
 		this.parent = parent;
 		this.tiles = LevelGenerator.createRandomWorld(
 				(int) (GlobalOptions.WIDTH / TILE_SIZE) * 2,
@@ -150,8 +142,9 @@ public class Level {
 	}
 	
 	public void updateEntities(float delta) {
-		for(Entity e : this.entities)
+		for (Entity e : this.entities) {
 			e.update(delta);
+		} 
 	}
 
 	public void handleEntityCollisions() {
@@ -227,20 +220,17 @@ public class Level {
 	}
 
 	public void render(float delta) {
-		Fonts.CENTURY_GOTHIC.drawString(14, 10, 10, (this.timer.getTime() / 1000.0) + "", Color.white);
-		glPushMatrix();
-		{
+		glPushMatrix(); {
 			glTranslatef(-this.levelScroll.x, -this.levelScroll.y, 0f);
 			this.renderTiles();
 			this.renderEntities(delta);
 			this.player.render(delta);
-		}
-		glPopMatrix();
+		} glPopMatrix();
 	}
 
 	private void renderTiles() {
 		glColor4f(1, 1, 1, 1);
-		Textures.TEST.getTexture().bind();
+		Textures.TILE.getTexture().bind();
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

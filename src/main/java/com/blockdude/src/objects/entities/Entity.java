@@ -7,17 +7,16 @@ import com.blockdude.src.textures.Textures;
 import org.newdawn.slick.geom.*;
 
 public class Entity {
-	
 	private int id;
 	private int data;
 	
 	private Level parentLevel;
 	
-	public Vector2f speed = new Vector2f(10,10);
-	public Vector2f motion = new Vector2f(0,0);
-	public Vector2f pos = new Vector2f(0,0);
-	public Vector2f lastPos = new Vector2f(0,0);
-	public Vector2f friction = new Vector2f(0.9f,0.9f);
+	public Vector2f speed = new Vector2f(10, 10);
+	public Vector2f motion = new Vector2f(0, 0);
+	public Vector2f pos = new Vector2f(0, 0);
+	public Vector2f lastPos = new Vector2f(0, 0);
+	public Vector2f friction = new Vector2f(0.9f, 0.9f);
 	
 	public Shape shape;
 	public Textures texture;

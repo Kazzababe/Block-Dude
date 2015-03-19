@@ -36,6 +36,12 @@ public class ScreenMainMenu extends Screen {
 			case 0:
 				BlockDude.setScreen(Screens.GAME);
 				break;
+			case 1:
+				BlockDude.setScreen(Screens.OPTIONS);
+				break;
+			case 2:
+				BlockDude.exit();
+				break;
 		}
 	}
 

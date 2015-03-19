@@ -6,7 +6,8 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public enum Textures {
 	TEST("textures/tree.png"),
-	BLOCKDUDE("textures/blockdude1.png");
+	BLOCKDUDE("textures/blockdude1.png"), 
+	TILE("textures/tile.png");
 
 	private String path;
 	private Texture texture;

@@ -48,14 +48,14 @@ public class BlockDude {
 			} else {
 				Display.create();
 			}
-			Display.setResizable(true);
+			Display.setResizable(false);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
-			this.exit();
+			exit();
 		}
 		this.setDisplayIcon();
-
-		setScreen(Screens.MAIN_MENU);
+		
+		setScreen(Screens.GAME);
 	}
 	
 	/**
@@ -129,12 +129,8 @@ public class BlockDude {
 			Display.update();
 			Display.sync(TARGET_FPS);
 		}
-		Display.destroy();
-		
 		exit();
 	}
-	
-	
 	
 	/**
 	 * Finds the time between the current frame and the previous frame.
@@ -152,7 +148,8 @@ public class BlockDude {
 	/**
 	 * Close the window and effectively end the program.
 	 */
-	private void exit() {
+	public static void exit() {
+		Display.destroy();
 		BlockDude.screen.dispose();
 		LevelDB.instance.close();
 		System.exit(0);
