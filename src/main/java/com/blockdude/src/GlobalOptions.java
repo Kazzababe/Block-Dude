@@ -11,4 +11,8 @@ public class GlobalOptions {
 	
 	// Max amount of vertices any shape may have
 	public static int MAX_VERTICES = 18;
+	
+	// Audio related options
+	public static float MUSIC_VOLUME;
+	public static float SOUND_VOLUME;
 }

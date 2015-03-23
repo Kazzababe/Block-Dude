@@ -55,7 +55,7 @@ public class BlockDude {
 		}
 		this.setDisplayIcon();
 		
-		setScreen(Screens.GAME);
+		setScreen(Screens.OPTIONS);
 	}
 	
 	/**
@@ -123,7 +123,7 @@ public class BlockDude {
 			
 			if (screen != null) {
 				screen.update(delta);
-				screen.display(delta);
+				screen.render(delta);
 			}
 			
 			Display.update();

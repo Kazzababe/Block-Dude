@@ -5,6 +5,7 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 
 import com.blockdude.src.BlockDude;
+import com.blockdude.src.audio.MusicHelper;
 import com.blockdude.src.gui.GuiButton;
 import com.blockdude.src.gui.GuiMainMenuTextButton;
 
@@ -19,7 +20,7 @@ public class ScreenMainMenu extends Screen {
 	}
 
 	@Override
-	public void display(float delta) {
+	public void render(float delta) {
 		for (GuiButton button : this.buttons) {
 			button.render();
 		}
@@ -55,7 +56,7 @@ public class ScreenMainMenu extends Screen {
 		try {
 			this.music = new Music("music/main_menu.ogg");
 			this.music.fade(1500, 1.0F, false);
-			this.music.loop();
+			MusicHelper.playMusic(this.music, true);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}

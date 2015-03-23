@@ -8,7 +8,7 @@ public class ScreenLevelSelect extends Screen {
 	}
 
 	@Override
-	public void display(float delta) {
+	public void render(float delta) {
 		
 	}
 

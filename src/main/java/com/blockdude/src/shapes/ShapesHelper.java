@@ -15,7 +15,9 @@ public class ShapesHelper {
 	}
 	
 	public static void rect(float x, float y, float width, float height, Color color) {
+		glDisable(GL_TEXTURE_2D);
 		glColor3f(color.r, color.g, color.b);
 		glRectf(x, y, x + width, y + height);
+		glEnable(GL_TEXTURE_2D);
 	}
 }
