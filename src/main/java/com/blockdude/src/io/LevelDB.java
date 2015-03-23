@@ -44,7 +44,7 @@ public class LevelDB {
     public void close() {
     	try {
 			this.db.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// Uh... shoot
 			e.printStackTrace();
 		}

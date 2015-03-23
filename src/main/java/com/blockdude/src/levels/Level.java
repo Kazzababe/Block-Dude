@@ -126,6 +126,10 @@ public class Level {
 		return this.parent;
 	}
 
+	public void levelCompleted() {
+		this.parent.nextLevel();
+	}
+	
 	public Tile[][] getTiles() {
 		return this.tiles;
 	}

@@ -1,5 +1,8 @@
 package com.blockdude.src.objects.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -24,6 +27,8 @@ public class Player extends Entity {
 	public float maxSpeed = 10.0f;
 	
 	private boolean facingRight = true;
+	
+	private List<Tile> intersectingTiles = new ArrayList<Tile>();
 	
 	public Player(Level parentLevel, int id) {
 		super(parentLevel, id);
@@ -98,8 +103,19 @@ public class Player extends Entity {
 			this.facingRight = true;
 		}
 		if (InputHelper.isKeyDown(Keyboard.KEY_DOWN) || InputHelper.isKeyDown(Keyboard.KEY_S)) {
-			// Put item down
+			if(atExit()) {
+				this.getParentLevel().levelCompleted();
+			}
 		}
+	}
+	
+	public boolean atExit() {
+		for(Tile t : this.intersectingTiles) {
+			if(t == Tile.exitTile)
+				return true;
+			System.out.println(t.getClass());
+		}
+		return false;
 	}
 	
 	@Override
@@ -140,11 +156,16 @@ public class Player extends Entity {
 		int width = this.getParentLevel().getTiles().length;
 		int height = this.getParentLevel().getTiles()[0].length;
 		Tile[][] tiles = this.getParentLevel().getTiles();
+		this.intersectingTiles.clear();
 		for (int x = (int) (this.pos.x / tileSize) - 2; x < this.pos.x / tileSize + 2; x++) {
 			for (int y = (int) (this.pos.y / tileSize) - 2; y < this.pos.y / tileSize + 2; y++) {
-				if (x < 0 || x >= width || y < 0 || y >= height || tiles[x][y] == null || !tiles[x][y].isSolid()) {
+				if (x < 0 || x >= width || y < 0 || y >= height || tiles[x][y] == null)
 					continue;
-				}
+				
+				this.intersectingTiles.add(tiles[x][y]);
+				
+				if(!tiles[x][y].isSolid())
+					continue;
 				
 				tileShape = tiles[x][y].getShape(x * tileSize + 0.1f, y * tileSize + 0.1f, tileSize - 0.2f);
 				

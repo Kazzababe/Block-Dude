@@ -9,14 +9,14 @@ public class World {
 	public static final Vector2f GRAVITY = new Vector2f(0.0F, 0.25F);
 	
 	private String name;
-	private List<Level> levels;
+	private ArrayList<Level> levels = new ArrayList<Level>();
 	
 	private int currentLevel = 0;
 	
 	public World(String name) {
 		this.name = name;
-		
-		this.levels = new ArrayList<Level>();
+		for(int i = 0; i < 100; i++)
+			levels.add(new Level(this));
 	}
 	
 	public void update(float delta) {
@@ -31,8 +31,14 @@ public class World {
 		return this.name;
 	}
 	
+	public void nextLevel() {
+		this.levels.get(this.currentLevel).dispose();
+		this.currentLevel++;
+		this.setLevel(this.currentLevel, new Level(this));
+	}
+	
 	public void setLevel(int index, Level level) {
-		this.levels.add(level);
+		this.levels.set(index, level);
 	}
 	
 	public void dispose() {

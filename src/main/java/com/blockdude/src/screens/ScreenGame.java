@@ -9,7 +9,6 @@ public class ScreenGame extends Screen {
 	public ScreenGame(){
 		this.currentWorld = new World("World One");
 		this.currentWorld.setLevel(0, new Level(this.currentWorld));
-		this.currentWorld.setLevel(0, new Level(this.currentWorld));
 	}
 
 	@Override
