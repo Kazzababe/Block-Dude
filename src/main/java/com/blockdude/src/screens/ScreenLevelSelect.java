@@ -21,4 +21,9 @@ public class ScreenLevelSelect extends Screen {
 	public void show() {
 		
 	}
+
+	@Override
+	public void init() {
+		
+	}
 }

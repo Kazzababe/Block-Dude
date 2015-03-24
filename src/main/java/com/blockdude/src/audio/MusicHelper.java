@@ -12,12 +12,12 @@ public class MusicHelper implements MusicListener {
 	private static Set<Music> music = new HashSet<Music>();
 	
 	public static void playMusic(Music music, boolean loop) {
-		music.setVolume(GlobalOptions.MUSIC_VOLUME);
 		if (loop) {
 			music.loop();
 		} else {
 			music.play();
 		}
+		music.setVolume(GlobalOptions.MUSIC_VOLUME);
 		music.addListener(new MusicHelper());
 		MusicHelper.music.add(music);
 	}
@@ -25,6 +25,13 @@ public class MusicHelper implements MusicListener {
 	public static void changeVolume() {
 		for (Music music : MusicHelper.music) {
 			music.setVolume(GlobalOptions.MUSIC_VOLUME);
+		}
+	}
+	
+	public static void stopMusic(Music music) {
+		music.stop();
+		if (MusicHelper.music.contains(music)) {
+			MusicHelper.music.remove(music);
 		}
 	}
 	

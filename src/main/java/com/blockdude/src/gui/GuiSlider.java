@@ -8,7 +8,7 @@ import org.newdawn.slick.geom.Rectangle;
 import com.blockdude.src.shapes.ShapesHelper;
 import com.blockdude.src.util.input.InputHelper;
 
-public class GuiSlider {
+public class GuiSlider extends GuiElement {
 	private float x;
 	private float y;
 	

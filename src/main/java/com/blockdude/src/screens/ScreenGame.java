@@ -30,5 +30,9 @@ public class ScreenGame extends Screen {
 	
 	@Override
 	public void show() {}
-	
+
+	@Override
+	public void init() {
+		
+	}
 }

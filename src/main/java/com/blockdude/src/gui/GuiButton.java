@@ -5,7 +5,7 @@ import org.lwjgl.input.Mouse;
 import com.blockdude.src.GlobalOptions;
 import com.blockdude.src.util.input.InputHelper;
 
-public abstract class GuiButton {
+public abstract class GuiButton extends GuiElement {
 	private String text;
 	
 	private int id;
@@ -60,6 +60,7 @@ public abstract class GuiButton {
 	/**
 	 * The method that is called every tick meant to handle logic updates for the button.
 	 */
+	@Override
 	public void update() {
 		this.active = isInside(Mouse.getX(), GlobalOptions.HEIGHT - Mouse.getY());
 		if (InputHelper.isMousePressed(0) && this.active) {
@@ -79,7 +80,6 @@ public abstract class GuiButton {
 		return this.active;
 	}
 	
-	public abstract void render();
 	public abstract boolean isInside(float x, float y);
 	
 	public abstract void onMouseClick();

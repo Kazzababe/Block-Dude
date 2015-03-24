@@ -10,7 +10,8 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public enum Fonts {
 	CENTURY_GOTHIC("fonts/century_gothic.ttf", new int[] {10, 14, 18, 22, 32, 48, 72}), 
-	OPEN_SANS("fonts/OpenSans-Regular.ttf", new int[] {10, 14, 18, 22, 32, 48, 72});
+	OPEN_SANS("fonts/OpenSans-Regular.ttf", new int[] {10, 14, 18, 22, 32, 48, 72}), 
+	OSWALD("fonts/oswald.regular.ttf", new int[] {10, 14, 18, 22, 32, 48, 72});
 	
 	private String path;
 	private TrueTypeFont[] font = new TrueTypeFont[101];

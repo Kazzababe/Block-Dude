@@ -28,7 +28,7 @@ public class ScreenMainMenu extends Screen {
 
 	@Override
 	public void dispose() {
-		
+		MusicHelper.stopMusic(this.music);
 	}
 	
 	@Override
@@ -60,5 +60,10 @@ public class ScreenMainMenu extends Screen {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void init() {
+		
 	}
 }

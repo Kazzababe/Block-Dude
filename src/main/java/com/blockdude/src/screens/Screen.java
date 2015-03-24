@@ -16,6 +16,7 @@ public abstract class Screen {
 	public abstract void render(float delta);
 	public abstract void dispose();
 	public abstract void show();
+	public abstract void init();
 	
 	public void onButtonClick(GuiButton button) {
 		//Filler, just don't want it required in other screen objects

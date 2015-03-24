@@ -13,6 +13,7 @@ public class GlobalOptions {
 	public static int MAX_VERTICES = 18;
 	
 	// Audio related options
-	public static float MUSIC_VOLUME;
-	public static float SOUND_VOLUME;
+	public static float MASTER_VOLUME = 1.0F;
+	public static float MUSIC_VOLUME = 1.0F;
+	public static float SOUND_VOLUME = 1.0F;
 }

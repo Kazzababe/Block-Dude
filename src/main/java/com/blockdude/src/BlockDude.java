@@ -48,7 +48,7 @@ public class BlockDude {
 			} else {
 				Display.create();
 			}
-			Display.setResizable(true);
+			Display.setResizable(false);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			exit();
@@ -77,6 +77,10 @@ public class BlockDude {
 	private void resize() {
 		GlobalOptions.WIDTH = Display.getWidth();
 		GlobalOptions.HEIGHT = Display.getHeight();
+		
+		if (screen != null) {
+			//screen.show();
+		}
 		
 		glClear(GL_COLOR_BUFFER_BIT);
 		glViewport(0, 0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT);
