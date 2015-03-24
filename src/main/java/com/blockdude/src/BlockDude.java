@@ -48,7 +48,7 @@ public class BlockDude {
 			} else {
 				Display.create();
 			}
-			Display.setResizable(false);
+			Display.setResizable(true);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			exit();
@@ -77,12 +77,9 @@ public class BlockDude {
 	private void resize() {
 		GlobalOptions.WIDTH = Display.getWidth();
 		GlobalOptions.HEIGHT = Display.getHeight();
-		            
-		glViewport(0, 0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT); //NEW
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT, 0, -1, 1);
-
+		
+		glClear(GL_COLOR_BUFFER_BIT);
+		glViewport(0, 0, GlobalOptions.WIDTH, GlobalOptions.HEIGHT);
 	}
 	
 	/**

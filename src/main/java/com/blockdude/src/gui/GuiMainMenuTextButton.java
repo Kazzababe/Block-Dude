@@ -35,11 +35,6 @@ public class GuiMainMenuTextButton extends GuiButton {
 	public void onMouseRelease() {
 		
 	}
-	
-	@Override
-	public void update() {
-		super.update();
-	}
 
 	@Override
 	public boolean isInside(float x, float y) {
