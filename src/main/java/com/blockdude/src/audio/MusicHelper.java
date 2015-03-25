@@ -17,14 +17,14 @@ public class MusicHelper implements MusicListener {
 		} else {
 			music.play();
 		}
-		music.setVolume(GlobalOptions.MUSIC_VOLUME);
+		music.setVolume(GlobalOptions.MUSIC_VOLUME * GlobalOptions.MASTER_VOLUME);
 		music.addListener(new MusicHelper());
 		MusicHelper.music.add(music);
 	}
 	
 	public static void changeVolume() {
 		for (Music music : MusicHelper.music) {
-			music.setVolume(GlobalOptions.MUSIC_VOLUME);
+			music.setVolume(GlobalOptions.MUSIC_VOLUME * GlobalOptions.MASTER_VOLUME);
 		}
 	}
 	
