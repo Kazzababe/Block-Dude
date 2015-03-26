@@ -1,7 +1,11 @@
 package com.blockdude.src.screens;
 
+import org.lwjgl.input.Keyboard;
+
+import com.blockdude.src.BlockDude;
 import com.blockdude.src.levels.Level;
 import com.blockdude.src.levels.World;
+import com.blockdude.src.util.input.InputHelper;
 
 public class ScreenGame extends Screen {
 	private World currentWorld;
@@ -14,6 +18,9 @@ public class ScreenGame extends Screen {
 	@Override
 	public void update(float delta) {
 		this.currentWorld.update(delta);
+		if(InputHelper.isKeyDown(Keyboard.KEY_ESCAPE)){
+			BlockDude.setScreen(Screens.OPTIONS);
+		}
 		
 	}
 

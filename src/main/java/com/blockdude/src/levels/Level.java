@@ -5,6 +5,9 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
@@ -43,17 +46,23 @@ public class Level {
 	private Buffer buffers;
 
 	private QuadTree entityTree;
-	private List<Entity> entities;
-
+	public List<Entity> entities;
+	private Comparator<QuadTreeObject> entitySorter = new Comparator<QuadTreeObject>() {
+		@Override
+		public int compare(QuadTreeObject o1, QuadTreeObject o2) {
+			return (int)(((Entity)o1.object).pos.getY() - ((Entity)o2.object).pos.getY());
+		}
+	};
+	
 	public Level(World parent) {
 		this.parent = parent;
 		this.tiles = LevelGenerator.createRandomWorld(
 				(int) (GlobalOptions.WIDTH / TILE_SIZE) * 2,
-				(int) (GlobalOptions.HEIGHT / TILE_SIZE));
+				(int) (GlobalOptions.HEIGHT / TILE_SIZE), 0);
 		this.width = this.tiles.length;
 		this.height = this.tiles[0].length;
 
-		this.spawn = this.findOpenSpot(0, 0);
+		this.spawn = this.findOpenSpot(0, 14);
 		this.player = new Player(this, 0);
 		this.player.pos.set(spawn);
 
@@ -65,7 +74,15 @@ public class Level {
 		
 		this.entities = new ArrayList<Entity>();
 		Entity e = new TileEntity(this, 0);
-		e.pos.set(this.findOpenSpot(6, 2));
+		e.pos.set(this.findOpenSpot(6, 8));
+		this.entities.add(e);
+		
+		e = new TileEntity(this, 0);
+		e.pos.set(this.findOpenSpot(6, 9));
+		this.entities.add(e);
+		
+		e = new TileEntity(this, 0);
+		e.pos.set(this.findOpenSpot(6, 10));
 		this.entities.add(e);
 	}
 
@@ -174,6 +191,7 @@ public class Level {
 			
 			returnObjects.clear();
 			this.entityTree.retrieve(returnObjects, new QuadTreeObject(rekt, entity));
+			//returnObjects.sort(entitySorter);
 
 			for (int x = 0; x < returnObjects.size(); x++) {
 				Entity e = (Entity) returnObjects.get(x).object;

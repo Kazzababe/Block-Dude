@@ -14,6 +14,7 @@ public class CarryableItem extends Item {
 	}
 	
 	public void setOwner(Entity owner){
+		System.out.println("pickup");
 		this.owner = owner;
 	}
 	

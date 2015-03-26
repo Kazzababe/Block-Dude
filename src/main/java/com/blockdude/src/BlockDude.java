@@ -24,6 +24,7 @@ public class BlockDude {
 	private static final float TARGET_DELTA = (float) Math.floor(1000.0 / TARGET_FPS);
 	
 	private static Screen screen;
+	private static Screen cachedScreen;
 	
 	private long lastFrame;
 	
@@ -55,7 +56,7 @@ public class BlockDude {
 		}
 		this.setDisplayIcon();
 		
-		setScreen(Screens.OPTIONS);
+		setScreen(Screens.GAME);
 	}
 	
 	/**
@@ -165,6 +166,7 @@ public class BlockDude {
 		if (BlockDude.screen != null) {
 			BlockDude.screen.dispose();
 		}
+		
 		try {
 			BlockDude.screen = screen.getScreenClass().newInstance();
 			BlockDude.screen.show();

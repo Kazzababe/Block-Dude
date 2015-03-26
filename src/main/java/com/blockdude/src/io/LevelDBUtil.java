@@ -10,6 +10,7 @@ public class LevelDBUtil {
     
     public static final byte SCOREBOARD_DATA = 0x00;
     public static final byte PLAYER_DATA = 0x01;
+    public static final byte LEVEL_DATA = 0x02;
 	
 	public static byte[] compileKey(int world, int level, byte dataType){
         return ByteBuffer.allocate(KEY_SIZE).order(ByteOrder.BIG_ENDIAN).putInt(world).putInt(level).put(dataType).array();

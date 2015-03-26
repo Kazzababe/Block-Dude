@@ -25,29 +25,34 @@ public class TileEntity extends CarryableItem {
 		this.type = EntityType.TILE_ENTITY;
 		
 		this.pos = new Vector2f(300F, 300F);
-		this.shape = new Rectangle(0, 0, 28, 28);
+		this.getParentLevel();
+		this.shape = new Rectangle(0, 0, Level.TILE_SIZE, Level.TILE_SIZE);
 	}
 	
 	@Override
 	public void render(float delta){
+		if(this.getOwner() != null) {
+			// render in hand
+			return;
+		}
 	    //ShapeRenderer.draw(shape);
-		Textures.TEST.getTexture().bind();
+		Textures.CRATE.getTexture().bind();
 		
 		// Eww, immediate mode... will change later
 		glColor4f(1,1,1,1);
 		glBegin(GL_TRIANGLES); {
-			glTexCoord2f(0,0);
+			glTexCoord2f(0f,0f);
 			glVertex2f(this.shape.getMinX(), this.shape.getMinY());
-			glTexCoord2f(0,0.6875f);
+			glTexCoord2f(0f,1f);
 			glVertex2f(this.shape.getMinX(), this.shape.getMaxY());
-			glTexCoord2f(0.5625f,0.6875f);
+			glTexCoord2f(1f,1f);
 			glVertex2f(this.shape.getMaxX(), this.shape.getMaxY());
 			
-			glTexCoord2f(0.5625f,0.6875f);
+			glTexCoord2f(1f,1f);
 			glVertex2f(this.shape.getMaxX(), this.shape.getMaxY());
-			glTexCoord2f(0.5625f,0);
+			glTexCoord2f(1f,0f);
 			glVertex2f(this.shape.getMaxX(), this.shape.getMinY());
-			glTexCoord2f(0,0);
+			glTexCoord2f(0f,0f);
 			glVertex2f(this.shape.getMinX(), this.shape.getMinY());
 		}
 		glEnd();
@@ -55,9 +60,15 @@ public class TileEntity extends CarryableItem {
 	
 	@Override
 	public void update(float delta) {
+		if(this.getOwner() != null)
+			return;
+		
+		this.canMove = new boolean[]{true,true,true,true};
+		
 		// Update this position
 		this.motion.x += World.GRAVITY.x * delta;
 		this.motion.y += World.GRAVITY.y * delta;
+		//this.motion.x += 0.2f;
 		
 		this.pos.x += this.motion.x;
 		this.shape.setLocation(this.pos);
@@ -73,6 +84,9 @@ public class TileEntity extends CarryableItem {
 	
 	@Override
 	public void handleCollision(Entity entity) {
+		if(entity == this)
+			return;
+		
 		this.pos.x += this.motion.x;
 		this.shape.setLocation(this.pos);
 		this.solveEntityCollision(entity, this.motion.x, 0);
@@ -88,22 +102,26 @@ public class TileEntity extends CarryableItem {
 
 		// if (this.collides(this.shape, tileShape)) {
 		if (this.shape.intersects(entityShape) || entityShape.contains(this.shape)) {
-			if (xv < 0) {
+			if (xv < 0 || !e.canMove[LEFT]) {
 				this.pos.x = entityShape.getX() + entityShape.getWidth();
 				this.motion.x = 0;
+				this.canMove[LEFT] = this.canMove[LEFT] && e.canMove[LEFT];
 			}
-			if (xv > 0) {
+			if (xv > 0 || !e.canMove[RIGHT]) {
 				this.pos.x = entityShape.getX() - this.shape.getWidth();
 				this.motion.x = 0;
+				this.canMove[RIGHT] = this.canMove[RIGHT] && e.canMove[RIGHT];
 			}
-			if (yv < 0) {
-				this.pos.y = entityShape.getY() + entityShape.getHeight();
+			if (yv < 0 || !e.canMove[UP]) {
+				this.pos.y = entityShape.getY() - entityShape.getHeight();
 				this.motion.y = 0;
+				this.canMove[UP] = this.canMove[UP] && e.canMove[UP];
 			}
-			if (yv > 0) {
+			if (yv > 0 || !e.canMove[DOWN]) {
 				this.pos.y = entityShape.getY() - this.shape.getHeight();
 				this.isOnGround = true;
 				this.motion.y = 0;
+				this.canMove[DOWN] = this.canMove[DOWN] && e.canMove[DOWN];
 			}
 		}
 	}
@@ -127,19 +145,23 @@ public class TileEntity extends CarryableItem {
 					if (xv < 0) {
 						this.pos.x = x * tileSize + tileSize;
 						this.motion.x = 0;
+						this.canMove[LEFT] = false;
 					}
 					if (xv > 0) {
 						this.pos.x = x * tileSize - this.shape.getWidth();
 						this.motion.x = 0;
+						this.canMove[RIGHT] = false;
 					}
 					if (yv < 0) {
 						this.pos.y = y * tileSize + tileSize;
 						this.motion.y = 0;
+						this.canMove[UP] = false;
 					}
 					if (yv > 0) {
 						this.pos.y = y * tileSize - this.shape.getHeight();
 						this.isOnGround = true;
 						this.motion.y = 0;
+						this.canMove[DOWN] = false;
 					}
 				}
 			}

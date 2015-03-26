@@ -17,6 +17,8 @@ public class Entity {
 	public Vector2f pos = new Vector2f(0, 0);
 	public Vector2f lastPos = new Vector2f(0, 0);
 	public Vector2f friction = new Vector2f(0.9f, 0.9f);
+	public boolean[] canMove = new boolean[]{true, true, true, true};
+	public int LEFT = 0, RIGHT = 1, UP = 2, DOWN = 3;
 	
 	public Shape shape;
 	public Textures texture;
