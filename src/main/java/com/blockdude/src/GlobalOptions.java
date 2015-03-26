@@ -1,7 +1,7 @@
 package com.blockdude.src;
 
 public class GlobalOptions {
-	public static boolean USE_ANTI_ALIAS = false;
+	public static boolean USE_ANTI_ALIAS = true;
 	public static int WIDTH = 1280;
 	public static int HEIGHT = 720;
 	

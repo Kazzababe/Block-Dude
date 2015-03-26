@@ -14,6 +14,28 @@ public class ShapesHelper {
 		} glEnd();
 	}
 	
+	public static void circle(float x, float y, float radius, Color color) {
+		glEnable(GL_POINT_SMOOTH);
+		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+		
+		glEnable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+		
+		glColor4f(color.r, color.g, color.b, color.a);
+		glBegin(GL_TRIANGLE_FAN);
+	    for (int i = 0; i < 180; i++) {
+	    	float theta = 2.0f * 3.1415926f * (float) i / 180;
+
+			float xx = (float) (radius * Math.cos(theta));
+			float yy = (float) (radius * Math.sin(theta));
+
+			glVertex2f(xx + x, yy + y);
+		} glEnd();
+		
+		glEnable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
+	}
+	
 	public static void rect(float x, float y, float width, float height, Color color) {
 		glEnable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);

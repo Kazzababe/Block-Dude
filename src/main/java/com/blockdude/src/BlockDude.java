@@ -20,11 +20,15 @@ import static com.blockdude.src.util.ImageUtils.*;
 import com.blockdude.src.util.input.InputHelper;
 
 public class BlockDude {
-	private static final int TARGET_FPS = 60;
+	public static final int TARGET_FPS = 60;
 	private static final float TARGET_DELTA = (float) Math.floor(1000.0 / TARGET_FPS);
 	
 	private static Screen screen;
+<<<<<<< Updated upstream
 	private static Screen cachedScreen;
+=======
+	private static int currentFrame;
+>>>>>>> Stashed changes
 	
 	private long lastFrame;
 	
@@ -56,7 +60,11 @@ public class BlockDude {
 		}
 		this.setDisplayIcon();
 		
+<<<<<<< Updated upstream
 		setScreen(Screens.GAME);
+=======
+		setScreen(Screens.MAIN_MENU);
+>>>>>>> Stashed changes
 	}
 	
 	/**
@@ -128,6 +136,8 @@ public class BlockDude {
 				screen.render(delta);
 			}
 			
+			currentFrame++;
+			
 			Display.update();
 			Display.sync(TARGET_FPS);
 		}
@@ -145,6 +155,10 @@ public class BlockDude {
 		this.lastFrame = time;
 		
 		return delta;
+	}
+	
+	public static int getCurrentFrame() {
+		return currentFrame;
 	}
 	
 	/**

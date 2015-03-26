@@ -35,7 +35,7 @@ public class ScreenMainMenu extends Screen {
 	public void onButtonClick(GuiButton button) {
 		switch (button.getId()) {
 			case 0:
-				BlockDude.setScreen(Screens.GAME);
+				BlockDude.setScreen(Screens.LEVEL_SELECT);
 				break;
 			case 1:
 				BlockDude.setScreen(Screens.OPTIONS);
