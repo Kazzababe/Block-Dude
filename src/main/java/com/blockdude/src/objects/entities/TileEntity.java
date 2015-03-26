@@ -26,7 +26,8 @@ public class TileEntity extends CarryableItem {
 		
 		this.pos = new Vector2f(300F, 300F);
 		this.getParentLevel();
-		this.shape = new Rectangle(0, 0, Level.TILE_SIZE, Level.TILE_SIZE);
+		this.hitbox = new Rectangle(0, 0, Level.TILE_SIZE, Level.TILE_SIZE);
+		this.shape = new Rectangle(0, 0, Level.TILE_SIZE-0.2f, Level.TILE_SIZE-0.2f);
 	}
 	
 	@Override
@@ -38,7 +39,6 @@ public class TileEntity extends CarryableItem {
 	    //ShapeRenderer.draw(shape);
 		Textures.CRATE.getTexture().bind();
 		
-		// Eww, immediate mode... will change later
 		glColor4f(1,1,1,1);
 		glBegin(GL_TRIANGLES); {
 			glTexCoord2f(0f,0f);
@@ -72,11 +72,13 @@ public class TileEntity extends CarryableItem {
 		
 		this.pos.x += this.motion.x;
 		this.shape.setLocation(this.pos);
+		this.hitbox.setLocation(this.pos);
 		this.solveTileCollisions(this.motion.x, 0);
 		
 		this.isOnGround = false;
 		this.pos.y += this.motion.y;
 		this.shape.setLocation(this.pos);
+		this.hitbox.setLocation(this.pos);
 		this.solveTileCollisions(0, this.motion.y);
 		
 		this.motion.x *= this.friction.x * delta;
@@ -89,11 +91,13 @@ public class TileEntity extends CarryableItem {
 		
 		this.pos.x += this.motion.x;
 		this.shape.setLocation(this.pos);
+		this.hitbox.setLocation(this.pos);
 		this.solveEntityCollision(entity, this.motion.x, 0);
 		
 		this.isOnGround = false;
 		this.pos.y += this.motion.y;
 		this.shape.setLocation(this.pos);
+		this.hitbox.setLocation(this.pos);
 		this.solveEntityCollision(entity, 0, this.motion.y);
 	}
 	
@@ -105,23 +109,23 @@ public class TileEntity extends CarryableItem {
 			if (xv < 0 || !e.canMove[LEFT]) {
 				this.pos.x = entityShape.getX() + entityShape.getWidth();
 				this.motion.x = 0;
-				this.canMove[LEFT] = this.canMove[LEFT] && e.canMove[LEFT];
+				this.canMove[LEFT] = e.canMove[LEFT];
 			}
 			if (xv > 0 || !e.canMove[RIGHT]) {
 				this.pos.x = entityShape.getX() - this.shape.getWidth();
 				this.motion.x = 0;
-				this.canMove[RIGHT] = this.canMove[RIGHT] && e.canMove[RIGHT];
+				this.canMove[RIGHT] = e.canMove[RIGHT];
 			}
 			if (yv < 0 || !e.canMove[UP]) {
 				this.pos.y = entityShape.getY() - entityShape.getHeight();
 				this.motion.y = 0;
-				this.canMove[UP] = this.canMove[UP] && e.canMove[UP];
+				this.canMove[UP] = e.canMove[UP];
 			}
 			if (yv > 0 || !e.canMove[DOWN]) {
 				this.pos.y = entityShape.getY() - this.shape.getHeight();
 				this.isOnGround = true;
 				this.motion.y = 0;
-				this.canMove[DOWN] = this.canMove[DOWN] && e.canMove[DOWN];
+				this.canMove[DOWN] = e.canMove[DOWN];
 			}
 		}
 	}

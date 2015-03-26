@@ -21,6 +21,7 @@ public class Entity {
 	public int LEFT = 0, RIGHT = 1, UP = 2, DOWN = 3;
 	
 	public Shape shape;
+	public Shape hitbox;
 	public Textures texture;
 	
 	public EntityType type = EntityType.NULL_ENTITY;
@@ -67,6 +68,10 @@ public class Entity {
 	
 	public boolean collidesWith(Entity e) {
 		return this.shape.intersects(e.shape) || this.shape.contains(e.shape);
+	}
+	
+	public boolean touches(Entity e) {
+		return this.hitbox.intersects(e.hitbox) || this.hitbox.contains(e.hitbox);
 	}
 	
 	public void handleCollision(Entity e) {

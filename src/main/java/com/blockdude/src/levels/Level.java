@@ -45,7 +45,7 @@ public class Level {
 
 	private Buffer buffers;
 
-	private QuadTree entityTree;
+	public QuadTree entityTree;
 	public List<Entity> entities;
 	private Comparator<QuadTreeObject> entitySorter = new Comparator<QuadTreeObject>() {
 		@Override
@@ -200,20 +200,6 @@ public class Level {
 				}
 			}
 		}
-		
-		entityShape = player.shape;
-		rekt = new Rectangle(entityShape.getX(), entityShape.getY(),
-				entityShape.getWidth(), entityShape.getHeight());
-			
-		returnObjects.clear();
-		this.entityTree.retrieve(returnObjects, new QuadTreeObject(rekt, player));
-	
-		for (int x = 0; x < returnObjects.size(); x++) {
-			Entity e = (Entity) returnObjects.get(x).object;
-			if (player.collidesWith(e)) {
-				player.handleCollision(e);
-			}
-		}
 	}
 
 	public void scroll(Vector2f pos) {
@@ -244,10 +230,37 @@ public class Level {
 	public void render(float delta) {
 		glPushMatrix(); {
 			glTranslatef(-this.levelScroll.x, -this.levelScroll.y, 0f);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			
 			this.renderTiles();
+			this.renderLevelBorder();
 			this.renderEntities(delta);
 			this.player.render(delta);
 		} glPopMatrix();
+	}
+	
+	private void renderLevelBorder() {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		Textures.TILE.getTexture().bind();
+		
+		glBegin(GL_TRIANGLES); {
+			glTexCoord2f(0, 0);
+			glVertex2f(-1000, -1000);
+			glTexCoord2f(0, 0.016f);
+			glVertex2f(-1000, 2000);
+			glTexCoord2f(0.032f, 0.016f);
+			glVertex2f(0, 2000);
+			
+			glTexCoord2f(0.032f, 0.016f);
+			glVertex2f(0, 2000);
+			glTexCoord2f(0.032f, 0);
+			glVertex2f(0, -1000);
+			glTexCoord2f(0, 0);
+			glVertex2f(-1000, -1000);
+		}
+		glEnd();
 	}
 
 	private void renderTiles() {

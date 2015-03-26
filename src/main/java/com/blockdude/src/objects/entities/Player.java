@@ -1,7 +1,9 @@
 package com.blockdude.src.objects.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.lwjgl.input.Keyboard;
 
@@ -13,6 +15,8 @@ import org.newdawn.slick.geom.Vector2f;
 
 import com.blockdude.src.levels.Level;
 import com.blockdude.src.levels.World;
+import com.blockdude.src.objects.QuadTree;
+import com.blockdude.src.objects.QuadTreeObject;
 import com.blockdude.src.objects.tiles.Tile;
 import com.blockdude.src.textures.Textures;
 import com.blockdude.src.util.input.InputHelper;
@@ -39,6 +43,7 @@ public class Player extends Entity {
 	
 	private List<Tile> intersectingTiles = new ArrayList<Tile>();
 	private List<Entity> intersectingEntities = new ArrayList<Entity>();
+	private List<Entity> entities = new ArrayList<Entity>();
 	
 	public Player(Level parentLevel, int id) {
 		super(parentLevel, id);
@@ -47,13 +52,14 @@ public class Player extends Entity {
 		this.speed = new Vector2f(0.5F, 0.5F);
 		this.pos = new Vector2f(300F, 300F);
 		this.shape = new Rectangle(0, 0, 11.45f, 28);
+		this.hitbox = this.shape;
 	}
 
 	@Override
 	public void render(float delta){
 		ani += delta;
 	    //ShapeRenderer.draw(shape);
-		System.out.println(delta);
+		
 		Textures.BLOCKDUDE_SHEET.getTexture().bind();
 		if (Math.abs(this.motion.x) < 0.5f)
 			this.currentFrame = 0;
@@ -73,7 +79,6 @@ public class Player extends Entity {
 		float uvmin = this.uvCoordsMin[this.currentFrame];
 		float uvmax = this.uvCoordsMax[this.currentFrame];
 		
-		// Eww, immediate mode... will change later
 		glColor4f(1, 1, 1, 1);
 		glPushMatrix(); {
 			glTranslatef(this.shape.getCenterX(), this.shape.getCenterY(), 0);
@@ -104,20 +109,40 @@ public class Player extends Entity {
 		this.controls(delta);
 		this.canMove = new boolean[]{true,true,true,true};
 		this.intersectingTiles.clear();
-		this.intersectingEntities.clear();
+		this.entities.clear();
 		
 		// Update this position
 		this.motion.x += World.GRAVITY.x * delta;
 		this.motion.y += World.GRAVITY.y * delta;
 		
+		QuadTree entityTree = this.getParentLevel().entityTree;
+		
+		Rectangle rekt = new Rectangle(this.shape.getX(), this.shape.getY(),
+				this.shape.getWidth(), this.shape.getHeight());
+		
+		List<QuadTreeObject> returnObjects = new ArrayList<QuadTreeObject>();
+		
+		entityTree.retrieve(returnObjects, new QuadTreeObject(rekt, this));
+	
+		for (int x = 0; x < returnObjects.size(); x++) {
+			Entity e = (Entity) returnObjects.get(x).object;
+			this.entities.add(e);
+			if(this.collidesWith(e))
+				this.intersectingEntities.add(e);
+		}
+		
 		this.pos.x += this.motion.x;
 		this.shape.setLocation(this.pos);
+		this.solveEntityCollisions(this.motion.x, 0);
 		this.solveTileCollisions(this.motion.x, 0);
+		
 		
 		this.isOnGround = false;
 		this.pos.y += this.motion.y;
 		this.shape.setLocation(this.pos);
+		this.solveEntityCollisions(0, this.motion.y);
 		this.solveTileCollisions(0, this.motion.y);
+		
 		
 		this.motion.x *= this.friction.x * delta;
 	}
@@ -147,14 +172,12 @@ public class Player extends Entity {
 	}
 	
 	private void pickUpObject() {
-		//this.intersectingEntities.clear();
-		//System.out.println(this.intersectingEntities.size());
 		if (this.itemInHand != null)
 			return;
 		
 		CarryableItem obj = null;
-		for (Entity e : this.intersectingEntities) {
-			if (e.type == EntityType.TILE_ENTITY) {
+		for (Entity e : this.entities) {
+			if (this.touches(e) && e.type == EntityType.TILE_ENTITY) {
 				if (obj != null && e.shape.getMinY() < obj.shape.getMinY()){
 					obj = (CarryableItem) e;
 				} else if(obj == null) {
@@ -176,7 +199,12 @@ public class Player extends Entity {
 			return;
 		
 		this.itemInHand.setOwner(null);
-		this.itemInHand.pos.set(this.pos);
+		
+		Vector2f pos = this.getPosition();
+		pos.x = ((int)(pos.x / Level.TILE_SIZE) + (this.facingRight ? 1 : -1)) * Level.TILE_SIZE;
+		pos.y = ((int)(pos.y / Level.TILE_SIZE)) * Level.TILE_SIZE;
+		this.itemInHand.pos.set(pos);
+		
 		this.getParentLevel().entities.add(this.itemInHand);
 		this.itemInHand = null;
 	}
@@ -190,35 +218,35 @@ public class Player extends Entity {
 		return false;
 	}
 	
-	@Override
-	public void handleCollision(Entity entity) {
-		this.solveEntityCollision(entity, this.motion.x, 0);
-		
-		this.isOnGround = false;
-		this.solveEntityCollision(entity, 0, this.motion.y);
-	}
-	
-	private void solveEntityCollision(Entity e, float xv, float yv) {
-		Shape entityShape = e.shape;
-		if (this.shape.intersects(entityShape) || entityShape.contains(this.shape)) {
-			this.intersectingEntities.add(e);
-			System.out.println(entityShape.getX() +" "+entityShape.getWidth()+" "+entityShape.getY()+" "+entityShape.getHeight());
-			if (xv < 0 || !e.canMove[LEFT]) {
-				this.pos.x = (entityShape.getX() + 0.1f) + (entityShape.getWidth() - 0.2f);
-				this.motion.x = this.motion.x>e.motion.x?this.motion.x:e.motion.x;
-			}
-			if (xv > 0 || !e.canMove[RIGHT]) {
-				this.pos.x = (entityShape.getX() + 0.1f) - this.shape.getWidth();
-				this.motion.x = this.motion.x<e.motion.x?this.motion.x:e.motion.x;
-			}
-			if (yv < 0 || !e.canMove[UP]) {
-				this.pos.y = (entityShape.getY() + 0.1f) + (entityShape.getHeight() - 0.2f);
-				this.motion.y = 0;
-			}
-			if (yv > 0 || !e.canMove[DOWN]) {
-				this.pos.y = (entityShape.getY() + 0.1f) - this.shape.getHeight();
-				this.isOnGround = true;
-				this.motion.y = 0;
+	private void solveEntityCollisions(float xv, float yv) {
+		Set<Entity> entities = new HashSet<Entity>();
+		for(Entity e : this.entities){
+			Shape entityShape = new Rectangle(Math.round(e.shape.getX()) + 0.1f, Math.round(e.shape.getY()) + 0.1f, Math.round(e.shape.getWidth()) - 0.2f, Math.round(e.shape.getHeight()) - 0.2f);
+			if (entities.add(e) && (this.shape.intersects(entityShape) || entityShape.contains(this.shape))) {
+				if (xv < 0) {// || !e.canMove[LEFT]) {
+					this.pos.x = Math.round(e.shape.getMinX()) + Math.round(e.shape.getWidth());
+					//this.motion.x = this.motion.x>e.motion.x?this.motion.x:e.motion.x;
+					this.motion.x = 0;
+					this.canMove[LEFT] = e.canMove[LEFT];
+				}
+				if (xv > 0) {// || !e.canMove[RIGHT]) {
+					this.pos.x = Math.round(e.shape.getMinX()) - this.shape.getWidth();
+					//this.motion.x = this.motion.x<e.motion.x?this.motion.x:e.motion.x;
+					this.motion.x = 0;
+					this.canMove[RIGHT] = e.canMove[RIGHT];
+				}
+				if (yv < 0) {// || !e.canMove[UP]) {
+					this.pos.y = Math.round(e.shape.getY()) + Math.round(e.shape.getHeight());
+					this.motion.y = 0;
+					this.canMove[UP] = e.canMove[UP];
+				}
+				if (yv > 0) {// || !e.canMove[DOWN]) {
+					this.pos.y = Math.round(e.shape.getY()) - this.shape.getHeight();
+					if(e.motion.y >= 0)
+						this.isOnGround = true;
+					this.motion.y = 0;
+					this.canMove[DOWN] = e.canMove[DOWN];
+				}
 			}
 		}
 	}
