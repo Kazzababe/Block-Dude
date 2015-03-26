@@ -24,11 +24,8 @@ public class BlockDude {
 	private static final float TARGET_DELTA = (float) Math.floor(1000.0 / TARGET_FPS);
 	
 	private static Screen screen;
-<<<<<<< Updated upstream
 	private static Screen cachedScreen;
-=======
 	private static int currentFrame;
->>>>>>> Stashed changes
 	
 	private long lastFrame;
 	
@@ -60,11 +57,7 @@ public class BlockDude {
 		}
 		this.setDisplayIcon();
 		
-<<<<<<< Updated upstream
-		setScreen(Screens.GAME);
-=======
 		setScreen(Screens.MAIN_MENU);
->>>>>>> Stashed changes
 	}
 	
 	/**
